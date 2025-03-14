@@ -1,4 +1,5 @@
 ﻿using Duende.IdentityModel;
+using Duende.IdentityServer.EntityFramework.DbContexts;
 using IdentityServer.Data;
 using IdentityServer.Models;
 using Microsoft.AspNetCore.Identity;
@@ -16,6 +17,9 @@ public class SeedData
         {
             var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
             context.Database.Migrate();
+
+            var context2 = scope.ServiceProvider.GetService<ConfigurationDbContext>();
+            context2.Database.Migrate();
 
             var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             var alice = userMgr.FindByNameAsync("alice").Result;

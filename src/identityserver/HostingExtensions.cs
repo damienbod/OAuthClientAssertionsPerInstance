@@ -52,7 +52,8 @@ internal static class HostingExtensions
 
         builder.Services.AddConfigurationDbContext<ConfigurationDbContext>(options =>
         {
-            options.ConfigureDbContext = builder => builder.UseSqlServer(connectionString);
+            options.ConfigureDbContext = b =>
+                b.UseSqlServer(connectionString, dbOpts => dbOpts.MigrationsAssembly(typeof(Program).Assembly.FullName));
         });
 
         builder.Services.AddAuthorization(opt =>
