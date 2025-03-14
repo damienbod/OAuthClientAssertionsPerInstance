@@ -32,7 +32,7 @@ static async Task<DynamicClientRegistrationResponse> RegisterClient(string acces
 
     var request = new DynamicClientRegistrationRequest
     {
-        Address = "https://localhost:5002/connect/dcr",
+        Address = "https://localhost:5001/connect/dcr",
         Document = new DynamicClientRegistrationDocument
         {
 

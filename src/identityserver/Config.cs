@@ -14,7 +14,9 @@ public static class Config
     public static IEnumerable<ApiScope> ApiScopes =>
         new ApiScope[]
         {
-            new ApiScope("scope-dpop")
+            new ApiScope("scope-dpop"),
+            new ApiScope("IdentityServer.Configuration"),
+            new ApiScope("SimpleApi")
         };
 
     public static IEnumerable<Client> Clients =>
@@ -29,6 +31,16 @@ public static class Config
 
                 AllowOfflineAccess = true,
                 AllowedScopes = { "openid", "profile", "scope-dpop" }
+            },
+            new Client
+            {
+                ClientId = "client",
+                ClientName = "Client Credentials Client for DCR",
+
+                AllowedGrantTypes = GrantTypes.ClientCredentials,
+                ClientSecrets = { new Secret("secret".Sha256()) },
+
+                AllowedScopes = { "IdentityServer.Configuration" }
             }
         };
 }
