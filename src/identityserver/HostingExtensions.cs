@@ -1,4 +1,8 @@
 using Duende.IdentityServer;
+using Duende.IdentityServer.Configuration;
+using Duende.IdentityServer.Configuration.EntityFramework;
+using Duende.IdentityServer.EntityFramework.DbContexts;
+using Duende.IdentityServer.EntityFramework.Storage;
 using IdentityServer.Data;
 using IdentityServer.Models;
 using Microsoft.AspNetCore.Identity;
@@ -17,8 +21,10 @@ internal static class HostingExtensions
 
         builder.Services.AddRazorPages();
 
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
-         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            options.UseSqlServer(connectionString));
 
         builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -40,6 +46,23 @@ internal static class HostingExtensions
             .AddInMemoryClients(Config.Clients)
             .AddAspNetIdentity<ApplicationUser>();
 
+        builder.Services.AddIdentityServerConfiguration(opt => {
+            //opt.LicenseKey = "<license>";
+        }).AddClientConfigurationStore();
+
+        builder.Services.AddConfigurationDbContext<ConfigurationDbContext>(options =>
+        {
+            options.ConfigureDbContext = builder => builder.UseSqlServer(connectionString);
+        });
+
+        builder.Services.AddAuthorization(opt =>
+        {
+            opt.AddPolicy("DCR", policy =>
+            {
+                policy.RequireClaim("scope", "IdentityServer.Configuration");
+            });
+        });
+
         return builder.Build();
     }
 
@@ -58,6 +81,9 @@ internal static class HostingExtensions
         app.UseRouting();
         app.UseIdentityServer();
         app.UseAuthorization();
+
+        
+        app.MapDynamicClientRegistration().RequireAuthorization("DCR");
 
         app.MapRazorPages()
             .RequireAuthorization();
