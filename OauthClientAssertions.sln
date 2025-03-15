@@ -14,7 +14,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api", "src\api\Api.csproj",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenerateCertiticate", "src\GenerateCertiticate\GenerateCertiticate.csproj", "{2D02D773-B71D-4BAB-9AC0-F70DBFB4C8C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleClient", "src\ConsoleClient\ConsoleClient.csproj", "{FA65E15A-E7DC-BC44-6E17-CD05AB1C6298}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleClientAssertions", "src\ConsoleClientAssertions\ConsoleClientAssertions.csproj", "{FA65E15A-E7DC-BC44-6E17-CD05AB1C6298}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
