@@ -16,7 +16,7 @@ public static class Config
         {
             new ApiScope("scope-dpop"),
             new ApiScope("IdentityServer.Configuration"),
-            new ApiScope("SimpleApi")
+            new ApiScope("mobile")
         };
 
     public static IEnumerable<Client> Clients =>
@@ -34,13 +34,13 @@ public static class Config
             },
             new Client
             {
-                ClientId = "client",
-                ClientName = "Client Credentials Client for DCR",
+                ClientId = "mobile-client",
+                ClientName = "Mobile client",
 
                 AllowedGrantTypes = GrantTypes.ClientCredentials,
                 ClientSecrets = { new Secret("secret".Sha256()) },
 
-                AllowedScopes = { "IdentityServer.Configuration" }
+                AllowedScopes = { "mobile" }
             }
         };
 }
