@@ -1,5 +1,7 @@
 # OAUTH Client assertions per instance
 
+ICustomTokenRequestValidator 
+
 ## Dynamic Client Registration
 
 ## Client assertion, Private Key JWTs
@@ -9,13 +11,11 @@
 ```
 Add-Migration "InitializeAppUsers" -c ApplicationDbContext
 
-Add-Migration "InitializeAppConfigurations" -c ConfigurationDbContext
+Add-Migration "InitializeAppConfigurations"
 ```
 
 ```
 Update-Database -Context ApplicationDbContext
-
-Update-Database -Context ConfigurationDbContext
 ```
 
 ## Links
