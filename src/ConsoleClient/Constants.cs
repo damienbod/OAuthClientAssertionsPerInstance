@@ -1,4 +1,4 @@
-namespace ConsoleDcrClient;
+namespace ConsoleClient;
 
 public class Constants
 {

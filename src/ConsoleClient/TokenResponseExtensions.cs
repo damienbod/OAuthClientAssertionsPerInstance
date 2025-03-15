@@ -3,7 +3,7 @@ using System.Text.Json;
 using IdentityModel;
 using IdentityModel.Client;
 
-namespace ConsoleDcrClient;
+namespace ConsoleClient;
 
 public static class TokenResponseExtensions
 {

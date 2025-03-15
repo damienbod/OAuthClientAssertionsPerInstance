@@ -1,12 +1,9 @@
-﻿using System;
-using System.Net.Http;
-using System.Text.Json;
-using ConsoleDcrClient;
+﻿using ConsoleClient;
 using IdentityModel.Client;
 
 Console.Title = "Client assertion Client";
 
-"\n\nObtaining access token for dynamic client".ConsoleYellow();
+"\n\nObtaining access token for mobile client".ConsoleYellow();
 var dynamicClientToken = await RequestTokenAsync("mobile-client", "secret");
 dynamicClientToken.Show();
 Console.ReadLine();
