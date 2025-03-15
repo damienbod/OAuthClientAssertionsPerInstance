@@ -1,4 +1,5 @@
-﻿using Duende.IdentityServer.Models;
+﻿using Duende.IdentityServer;
+using Duende.IdentityServer.Models;
 
 namespace IdentityServer;
 
@@ -19,28 +20,45 @@ public static class Config
             new ApiScope("mobile")
         };
 
-    public static IEnumerable<Client> Clients =>
-        new Client[]
-        {
-            new Client
+    public static IEnumerable<Client> Clients(IWebHostEnvironment environment)
+    {
+        //var privatePem = File.ReadAllText(Path.Combine(environment.ContentRootPath, 
+        //    "rsa256-private.pem"));
+        var publicPem = File.ReadAllText(Path.Combine(environment.ContentRootPath, "rsa256-public.pem"));
+        //var rsaCertificate = X509Certificate2.CreateFromPem(publicPem, privatePem);
+        //var rsaCertificateKey = new RsaSecurityKey(rsaCertificate.GetRSAPrivateKey());
+
+        return new Client[]
             {
-                ClientId = "cc-dpop",
-                ClientSecrets = { new Secret("de".Sha256()) },
+                new Client
+                {
+                    ClientId = "cc-dpop",
+                    ClientSecrets = { new Secret("de".Sha256()) },
 
-                AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
 
-                AllowOfflineAccess = true,
-                AllowedScopes = { "openid", "profile", "scope-dpop" }
-            },
-            new Client
-            {
-                ClientId = "mobile-client",
-                ClientName = "Mobile client",
+                    AllowOfflineAccess = true,
+                    AllowedScopes = { "openid", "profile", "scope-dpop" }
+                },
+                new Client
+                {
+                    ClientId = "mobile-client",
+                    ClientName = "Mobile client",
 
-                AllowedGrantTypes = GrantTypes.ClientCredentials,
-                ClientSecrets = { new Secret("secret".Sha256()) },
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    ClientSecrets = 
+                    [
+                        new Secret
+                        {
+                            // base64 encoded X.509 certificate
+                            Type = IdentityServerConstants.SecretTypes.X509CertificateBase64,
 
-                AllowedScopes = { "mobile" }
-            }
+                            Value = publicPem
+                        }
+                    ],
+
+                    AllowedScopes = { "mobile", "scope-dpop" }
+                }
         };
+    }
 }
