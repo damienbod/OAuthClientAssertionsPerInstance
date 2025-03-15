@@ -1,7 +1,6 @@
 ﻿using ConsoleClient;
 using Duende.IdentityModel;
 using IdentityModel.Client;
-using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -15,10 +14,11 @@ var publicPem = File.ReadAllText(Path.Combine("", "rsa256-public.pem"));
 var rsaCertificate = X509Certificate2.CreateFromPem(publicPem, privatePem);
 var rsaCertificateKey = new RsaSecurityKey(rsaCertificate.GetRSAPrivateKey());
 
+var signingCredentials = new SigningCredentials(new X509SecurityKey(rsaCertificate), "RS256");
+
 "\n\nObtaining access token for mobile client".ConsoleYellow();
 
-var response = await RequestTokenAsync(
-    new SigningCredentials(rsaCertificateKey, SecurityAlgorithms.RsaSha256));
+var response = await RequestTokenAsync(signingCredentials);
 
 response.Show();
 Console.ReadLine();
@@ -27,59 +27,39 @@ Console.ReadLine();
 await CallServiceAsync(response.AccessToken);
 Console.ReadLine();
 
-//static async Task<TokenResponse> RequestTokenAsync(string clientId = "mobile-client", string clientSecret = "secret")
-//{
-//    var client = new HttpClient();
 
-//    var disco = await client.GetDiscoveryDocumentAsync("https://localhost:5001");
-//    if (disco.IsError) throw new Exception(disco.Error);
-
-//    var response = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
-//    {
-//        Address = disco.TokenEndpoint,
-
-//        ClientId = clientId,
-//        ClientSecret = clientSecret,
-//    });
-
-//    if (response.IsError) throw new Exception(response.Error);
-//    return response;
-//}
-
-static async Task<TokenResponse> RequestTokenAsync(SigningCredentials credential)
+static async Task<TokenResponse> RequestTokenAsync(SigningCredentials signingCredentials)
 {
     var client = new HttpClient();
 
     var disco = await client.GetDiscoveryDocumentAsync("https://localhost:5001");
     if (disco.IsError) throw new Exception(disco.Error);
 
-    var clientToken = CreateClientToken(credential, "mobile-client", disco.TokenEndpoint);
-
+    var clientToken = CreateClientToken(signingCredentials, "mobile-client", disco.Issuer);
     var response = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
     {
         Address = disco.TokenEndpoint,
-        Scope = "scope-dpop",
-        ClientId = "mobile-client",
-        ClientCredentialStyle = ClientCredentialStyle.PostBody,
 
         ClientAssertion =
         {
             Type = OidcConstants.ClientAssertionTypes.JwtBearer,
             Value = clientToken
-        }
+        },
+
+        Scope = "mobile"
     });
 
     if (response.IsError) throw new Exception(response.Error);
     return response;
 }
 
-static string CreateClientToken(SigningCredentials credential, string clientId, string tokenEndpoint)
+static string CreateClientToken(SigningCredentials credential, string clientId, string audience)
 {
     var now = DateTime.UtcNow;
 
     var token = new JwtSecurityToken(
         clientId,
-        tokenEndpoint,
+        audience,
         new List<Claim>()
         {
             new Claim(JwtClaimTypes.JwtId, Guid.NewGuid().ToString()),
@@ -92,39 +72,17 @@ static string CreateClientToken(SigningCredentials credential, string clientId, 
     );
 
     var tokenHandler = new JwtSecurityTokenHandler();
-    return tokenHandler.WriteToken(token);
-}
-
-static string GetSignedClientAssertion(X509Certificate2 certificate, string aud, string clientId)
-{
-    // no need to add exp, nbf as JsonWebTokenHandler will add them by default.
-    var claims = new Dictionary<string, object>()
-        {
-            { "aud", aud },
-            { "iss", clientId },
-            { "jti", Guid.NewGuid().ToString() },
-            { "sub", clientId }
-        };
-
-    var securityTokenDescriptor = new SecurityTokenDescriptor
-    {
-        Claims = claims,
-        SigningCredentials = new X509SigningCredentials(certificate)
-    };
-
-    var handler = new JsonWebTokenHandler();
-    var signedClientAssertion = handler.CreateToken(securityTokenDescriptor);
-
-    return signedClientAssertion;
+    var clientToken = tokenHandler.WriteToken(token);
+    "\n\nClient Authentication Token:".ConsoleGreen();
+    Console.WriteLine(token);
+    return clientToken;
 }
 
 static async Task CallServiceAsync(string token)
 {
-    var baseAddress = Constants.SimpleApi;
-
     var client = new HttpClient
     {
-        BaseAddress = new Uri(baseAddress)
+        BaseAddress = new Uri("https://localhost:5003/")
     };
 
     client.SetBearerToken(token);

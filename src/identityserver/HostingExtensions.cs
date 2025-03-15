@@ -26,7 +26,7 @@ internal static class HostingExtensions
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
-        builder.Services
+        var idsvrBuilder = builder.Services
             .AddIdentityServer(options =>
             {
                 options.Events.RaiseErrorEvents = true;
@@ -40,6 +40,8 @@ internal static class HostingExtensions
             .AddInMemoryApiScopes(Config.ApiScopes)
             .AddInMemoryClients(Config.Clients(builder.Environment))
             .AddAspNetIdentity<ApplicationUser>();
+
+        idsvrBuilder.AddJwtBearerClientAuthentication();
 
         return builder.Build();
     }

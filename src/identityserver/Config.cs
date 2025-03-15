@@ -1,9 +1,6 @@
 ﻿using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Cryptography.X509Certificates;
-using System.Text.Json;
 
 namespace IdentityServer;
 
@@ -20,21 +17,13 @@ public static class Config
         new ApiScope[]
         {
             new ApiScope("scope-dpop"),
-            new ApiScope("IdentityServer.Configuration"),
             new ApiScope("mobile")
         };
 
     public static IEnumerable<Client> Clients(IWebHostEnvironment environment)
     {
-        //var privatePem = File.ReadAllText(Path.Combine(environment.ContentRootPath, 
-        //    "rsa256-private.pem"));
         var publicPem = File.ReadAllText(Path.Combine(environment.ContentRootPath, "rsa256-public.pem"));
         var rsaCertificate = X509Certificate2.CreateFromPem(publicPem);
-        // var rsaCertificate = X509Certificate2.CreateFromPem(publicPem, privatePem);
-        //var rsaCertificateKey = new RsaSecurityKey(rsaCertificate.GetRSAPrivateKey());
-
-        var key = new X509SecurityKey(rsaCertificate);
-        var jwk = JsonWebKeyConverter.ConvertFromX509SecurityKey(key, true);
        
         return new Client[]
             {
@@ -58,10 +47,9 @@ public static class Config
                     [
                         new Secret
                         {
-                            // base64 encoded X.509 certificate
-                            Type = IdentityServerConstants.SecretTypes.JsonWebKey,
-
-                            Value = JsonSerializer.Serialize(jwk)
+                            // X509 cert base64-encoded
+                            Type = IdentityServerConstants.SecretTypes.X509CertificateBase64,
+                            Value = Convert.ToBase64String(rsaCertificate.GetRawCertData())
                         }
                     ],
 
