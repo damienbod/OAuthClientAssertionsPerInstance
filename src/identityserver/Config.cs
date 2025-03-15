@@ -53,12 +53,24 @@ public static class Config
                             // base64 encoded X.509 certificate
                             Type = IdentityServerConstants.SecretTypes.X509CertificateBase64,
 
-                            Value = publicPem
+                            Value = ConvertPemToBase64(publicPem)
                         }
                     ],
 
                     AllowedScopes = { "mobile", "scope-dpop" }
                 }
         };
+    }
+
+    public static string ConvertPemToBase64(string pemString)
+    {
+        // Remove PEM headers and footers
+        var base64String = pemString
+            .Replace("-----BEGIN CERTIFICATE-----", string.Empty)
+            .Replace("-----END CERTIFICATE-----", string.Empty)
+            .Replace("\n", string.Empty)
+            .Replace("\r", string.Empty);
+
+        return base64String;
     }
 }

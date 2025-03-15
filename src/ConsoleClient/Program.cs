@@ -15,14 +15,15 @@ var rsaCertificate = X509Certificate2.CreateFromPem(publicPem, privatePem);
 var rsaCertificateKey = new RsaSecurityKey(rsaCertificate.GetRSAPrivateKey());
 
 "\n\nObtaining access token for mobile client".ConsoleYellow();
-var dynamicClientToken = await RequestTokenAsync(
+
+var response = await RequestTokenAsync(
     new SigningCredentials(rsaCertificateKey, SecurityAlgorithms.RsaSha256));
 
-dynamicClientToken.Show();
+response.Show();
 Console.ReadLine();
 
 "\n\nCalling API".ConsoleYellow();
-await CallServiceAsync(dynamicClientToken.AccessToken);
+await CallServiceAsync(response.AccessToken);
 Console.ReadLine();
 
 //static async Task<TokenResponse> RequestTokenAsync(string clientId = "mobile-client", string clientSecret = "secret")
