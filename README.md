@@ -9,9 +9,7 @@ ICustomTokenRequestValidator
 ## Migrations
 
 ```
-Add-Migration "InitializeAppUsers" -c ApplicationDbContext
-
-Add-Migration "InitializeAppConfigurations"
+Add-Migration "InitializeApp" -Context ApplicationDbContext
 ```
 
 ```
@@ -19,6 +17,10 @@ Update-Database -Context ApplicationDbContext
 ```
 
 ## Links
+
+https://docs.duendesoftware.com/identityserver/v7/tokens/authentication/jwt/
+
+https://docs.duendesoftware.com/identityserver/v7/reference/validators/custom_token_request_validator/
 
 https://docs.duendesoftware.com/identityserver/v7/configuration/dcr/
 
