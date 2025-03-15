@@ -1,6 +1,7 @@
 ﻿using ConsoleClient;
 using Duende.IdentityModel;
 using IdentityModel.Client;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -92,6 +93,29 @@ static string CreateClientToken(SigningCredentials credential, string clientId, 
 
     var tokenHandler = new JwtSecurityTokenHandler();
     return tokenHandler.WriteToken(token);
+}
+
+static string GetSignedClientAssertion(X509Certificate2 certificate, string aud, string clientId)
+{
+    // no need to add exp, nbf as JsonWebTokenHandler will add them by default.
+    var claims = new Dictionary<string, object>()
+        {
+            { "aud", aud },
+            { "iss", clientId },
+            { "jti", Guid.NewGuid().ToString() },
+            { "sub", clientId }
+        };
+
+    var securityTokenDescriptor = new SecurityTokenDescriptor
+    {
+        Claims = claims,
+        SigningCredentials = new X509SigningCredentials(certificate)
+    };
+
+    var handler = new JsonWebTokenHandler();
+    var signedClientAssertion = handler.CreateToken(securityTokenDescriptor);
+
+    return signedClientAssertion;
 }
 
 static async Task CallServiceAsync(string token)
