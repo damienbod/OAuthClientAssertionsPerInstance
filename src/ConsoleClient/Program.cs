@@ -1,7 +1,15 @@
 ﻿using ConsoleClient;
 using IdentityModel.Client;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Cryptography.X509Certificates;
 
 Console.Title = "Client assertion Client";
+
+var privatePem = File.ReadAllText(Path.Combine("", "rsa256-private.pem"));
+var publicPem = File.ReadAllText(Path.Combine("", "rsa256-public.pem"));
+
+var rsaCertificate = X509Certificate2.CreateFromPem(publicPem, privatePem);
+var rsaCertificateKey = new RsaSecurityKey(rsaCertificate.GetRSAPrivateKey());
 
 "\n\nObtaining access token for mobile client".ConsoleYellow();
 var dynamicClientToken = await RequestTokenAsync("mobile-client", "secret");
