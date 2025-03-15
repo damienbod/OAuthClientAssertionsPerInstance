@@ -1,12 +1,10 @@
 ﻿using ConsoleClient;
 using Duende.IdentityModel;
-using IdentityModel.Client;
+using Duende.IdentityModel.Client;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
-using System.Text.Json;
 
 Console.Title = "Client assertion Client";
 

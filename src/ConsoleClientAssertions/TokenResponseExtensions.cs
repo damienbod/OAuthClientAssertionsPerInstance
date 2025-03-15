@@ -1,7 +1,7 @@
 using System.Text;
 using System.Text.Json;
-using IdentityModel;
-using IdentityModel.Client;
+using Duende.IdentityModel.Client;
+using Duende.IdentityModel;
 
 namespace ConsoleClient;
 
