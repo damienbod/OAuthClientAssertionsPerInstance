@@ -8,12 +8,11 @@ using System.Security.Cryptography.X509Certificates;
 
 Console.Title = "Client assertion Client";
 
+// client assertion
 var privatePem = File.ReadAllText(Path.Combine("", "rsa256-private.pem"));
 var publicPem = File.ReadAllText(Path.Combine("", "rsa256-public.pem"));
-
 var rsaCertificate = X509Certificate2.CreateFromPem(publicPem, privatePem);
 var rsaCertificateKey = new RsaSecurityKey(rsaCertificate.GetRSAPrivateKey());
-
 var signingCredentials = new SigningCredentials(new X509SecurityKey(rsaCertificate), "RS256");
 
 "\n\nObtaining access token for mobile client".ConsoleYellow();
