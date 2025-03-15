@@ -41,7 +41,26 @@ public static class Config
                     }
                 ],
 
-                AllowedScopes = { "mobile", "scope-dpop" }
+                AllowedScopes = { "mobile" }
+            },
+            new Client
+            {
+                ClientId = "mobile-dpop-client",
+                ClientName = "Mobile dpop client",
+                RequireDPoP = true,
+
+                AllowedGrantTypes = GrantTypes.ClientCredentials,
+                ClientSecrets =
+                [
+                    new Secret
+                    {
+                        // X509 cert base64-encoded
+                        Type = IdentityServerConstants.SecretTypes.X509CertificateBase64,
+                        Value = Convert.ToBase64String(rsaCertificate.GetRawCertData())
+                    }
+                ],
+
+                AllowedScopes = { "scope-dpop" }
             }
         ];
     }

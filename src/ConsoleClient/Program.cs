@@ -4,7 +4,9 @@ using IdentityModel.Client;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using System.Text.Json;
 
 Console.Title = "Client assertion Client";
 
@@ -45,7 +47,7 @@ static async Task<TokenResponse> RequestTokenAsync(SigningCredentials signingCre
             Value = clientToken
         },
 
-        Scope = "mobile"
+        Scope = "mobile", 
     });
 
     if (response.IsError) throw new Exception(response.Error);
