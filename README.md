@@ -20,8 +20,6 @@ https://docs.duendesoftware.com/identityserver/v7/tokens/authentication/jwt/
 
 https://docs.duendesoftware.com/identityserver/v7/reference/validators/custom_token_request_validator/
 
-https://docs.duendesoftware.com/identityserver/v7/configuration/dcr/
-
 https://docs.duendesoftware.com/identityserver/v7/tokens/authentication/jwt/
 
 https://www.scottbrady.io/oauth/removing-shared-secrets-for-oauth-client-authentication
