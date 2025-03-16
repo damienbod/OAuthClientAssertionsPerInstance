@@ -20,7 +20,6 @@ public class OnboardingController : Controller
     /// Convert.ToBase64String(rsaCertificate.GetRawCertData())
     /// </summary>
     /// <param name="publicKey">Public key which is used by the session creator</param>
-    /// <returns></returns>
     [HttpPost]
     public string CreateSession(string publicKey)
     {

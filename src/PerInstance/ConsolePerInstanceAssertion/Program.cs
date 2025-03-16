@@ -1,4 +1,5 @@
 using Duende.AccessTokenManagement;
+using IdpPreInstanceAssertion;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
@@ -32,6 +33,7 @@ public class Program
             .ConfigureServices((services) =>
             {
                 services.AddDistributedMemoryCache();
+                services.AddSingleton<KeySessionService>();
 
                 services.AddScoped<IClientAssertionService, ClientAssertionService>();
                 // https://docs.duendesoftware.com/foss/accesstokenmanagement/advanced/client_assertions/
