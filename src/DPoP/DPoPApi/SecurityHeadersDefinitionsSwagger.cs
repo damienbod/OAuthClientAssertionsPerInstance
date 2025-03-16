@@ -1,4 +1,4 @@
-﻿namespace Api;
+﻿namespace DPoPApi;
 
 /// <summary>
 /// Weak security headers for Swagger UI
