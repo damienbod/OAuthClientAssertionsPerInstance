@@ -20,8 +20,8 @@ public static class Config
 
     public static IEnumerable<Client> Clients(IWebHostEnvironment environment)
     {
-        var publicPem = File.ReadAllText(Path.Combine(environment.ContentRootPath, "rsa256-public.pem"));
-        var rsaCertificate = X509Certificate2.CreateFromPem(publicPem);
+        //var publicPem = File.ReadAllText(Path.Combine(environment.ContentRootPath, "rsa256-public.pem"));
+        //var rsaCertificate = X509Certificate2.CreateFromPem(publicPem);
 
         return
         [
@@ -33,12 +33,12 @@ public static class Config
                 AllowedGrantTypes = GrantTypes.ClientCredentials,
                 ClientSecrets =
                 [
-                    new Secret
-                    {
-                        // X509 cert base64-encoded
-                        Type = IdentityServerConstants.SecretTypes.X509CertificateBase64,
-                        Value = Convert.ToBase64String(rsaCertificate.GetRawCertData())
-                    }
+                    //new Secret
+                    //{
+                    //    // X509 cert base64-encoded
+                    //    Type = IdentityServerConstants.SecretTypes.X509CertificateBase64,
+                    //    Value = Convert.ToBase64String(rsaCertificate.GetRawCertData())
+                    //}
                 ],
 
                 AllowedScopes = { "mobile" }
@@ -52,12 +52,12 @@ public static class Config
                 AllowedGrantTypes = GrantTypes.ClientCredentials,
                 ClientSecrets =
                 [
-                    new Secret
-                    {
-                        // X509 cert base64-encoded
-                        Type = IdentityServerConstants.SecretTypes.X509CertificateBase64,
-                        Value = Convert.ToBase64String(rsaCertificate.GetRawCertData())
-                    }
+                    //new Secret
+                    //{
+                    //    // X509 cert base64-encoded
+                    //    Type = IdentityServerConstants.SecretTypes.X509CertificateBase64,
+                    //    Value = Convert.ToBase64String(rsaCertificate.GetRawCertData())
+                    //}
                 ],
 
                 AllowedScopes = { "scope-dpop" }
