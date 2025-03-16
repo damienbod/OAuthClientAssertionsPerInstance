@@ -1,3 +1,4 @@
+using Duende.AspNetCore.Authentication.JwtBearer.DPoP;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Logging;
@@ -51,14 +52,26 @@ internal static class HostingExtensions
                 options.TokenValidationParameters.ValidTypes = ["at+jwt"];
             });
 
-        services.ConfigureDPoPTokensForScheme("dpoptokenscheme");
+        // layers DPoP onto the "token" scheme above
+        builder.Services.ConfigureDPoPTokensForScheme("token", opt =>
+        {
+            // Chose a validation mode: either Nonce or IssuedAt. With nonce validation,
+            // the api supplies a nonce that must be used to prove that the token was
+            // not pre-generated. With IssuedAt validation, the client includes the
+            // current time in the proof token, which is compared to the clock. Nonce
+            // validation provides protection against some attacks that are possible
+            // with IssuedAt validation, at the cost of an additional HTTP request being
+            // required each time the API is invoked.
+            //
+            // See RFC 9449 for more details.
+            opt.ValidationMode = ExpirationValidationMode.IssuedAt; // IssuedAt is the default.
+        });
 
-        services.AddAuthorization(options =>
-            options.AddPolicy("protectedScope", policy =>
+        services.AddAuthorizationBuilder()
+            .AddPolicy("protectedScope", policy =>
             {
                 policy.RequireClaim("scope", "scope-dpop");
-            })
-        );
+            });
 
         services.AddSwaggerGen(c =>
         {

@@ -13,10 +13,6 @@ public class ValuesController : Controller
         // debugging info
         var authHeader = Request.Headers.Authorization;
         var claims = User.Claims.Select(c => new { c.Type, c.Value });
-        var scheme = Request.GetAuthorizationScheme();
-        var proofToken = Request.GetDPoPProofToken();
-
-        var jsonResult = new JsonResult(new { scheme, proofToken, claims });
 
         return
         [
