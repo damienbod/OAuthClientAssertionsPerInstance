@@ -48,7 +48,7 @@ internal static class HostingExtensions
                 options.TokenValidationParameters.ValidateAudience = false;
                 options.MapInboundClaims = false;
 
-                options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+                options.TokenValidationParameters.ValidTypes = ["at+jwt"];
             });
 
         services.ConfigureDPoPTokensForScheme("dpoptokenscheme");

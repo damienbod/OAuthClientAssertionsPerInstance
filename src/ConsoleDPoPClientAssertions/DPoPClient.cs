@@ -8,7 +8,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ClientCredentials;
+namespace ConsoleDPoPClientAssertions;
 
 public class DPoPClient : BackgroundService
 {
@@ -28,9 +28,9 @@ public class DPoPClient : BackgroundService
         while (!stoppingToken.IsCancellationRequested)
         {
             Console.WriteLine("\n\n");
-            _logger.LogInformation("DPoPClient running at: {time}", DateTimeOffset.Now);
+            _logger.LogInformation("DPoPClient running at: {time}", DateTimeOffset.UtcNow);
 
-            var client = _clientFactory.CreateClient("client");
+            var client = _clientFactory.CreateClient("mobile-dpop-client");
             var response = await client.GetAsync("identity", stoppingToken);
                 
             if (response.IsSuccessStatusCode)

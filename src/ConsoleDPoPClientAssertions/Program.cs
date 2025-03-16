@@ -6,8 +6,9 @@ using Serilog.Sinks.SystemConsole.Themes;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
 using System.Text.Json;
+using Duende.AccessTokenManagement;
 
-namespace ClientCredentials;
+namespace ConsoleDPoPClientAssertions;
 
 public class Program
 {
@@ -32,19 +33,23 @@ public class Program
             {
                 services.AddDistributedMemoryCache();
 
+                services.AddScoped<IClientAssertionService, ClientAssertionService>();
+                // https://docs.duendesoftware.com/foss/accesstokenmanagement/advanced/client_assertions/
+
                 services.AddClientCredentialsTokenManagement()
                     .AddClient("dpop", client =>
                     {
                         client.TokenEndpoint = "https://localhost:5001/connect/token";
 
-                        client.ClientId = "dpop";
-                        client.ClientSecret = "905e4892-7610-44cb-a122-6209b38c882f";
+                        client.ClientId = "mobile-dpop-client";
+                        // Using client assertion
+                        //client.ClientSecret = "905e4892-7610-44cb-a122-6209b38c882f";
 
-                        client.Scope = "scope1";
+                        client.Scope = "scope-dpop";
                         client.DPoPJsonWebKey = CreateDPoPKey();
                     });
 
-                services.AddClientCredentialsHttpClient("client", "dpop", client =>
+                services.AddClientCredentialsHttpClient("client", "mobile-dpop-client", client =>
                 {
                     client.BaseAddress = new Uri("https://localhost:5005/");
                 });
@@ -63,5 +68,4 @@ public class Program
         var jwkJson = JsonSerializer.Serialize(jwk);
         return jwkJson;
     }
-
 }
