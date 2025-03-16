@@ -1,8 +1,30 @@
-# OAUTH Client assertions per instance
+# OAUTH Client assertions using Duende IdentityServer
 
 ICustomTokenRequestValidator 
 
+# Duende.IdentityServer.Validation.PrivateKeyJwtSecretValidator
+
+Validates JWTs that are signed with either X.509 certificates or keys wrapped in a JWK. Can be enabled by calling the AddJwtBearerClientAuthentication DI extension method.
+
+https://github.com/DuendeArchive/IdentityServer4/blob/archive/src/IdentityServer4/src/Validation/Default/PrivateKeyJwtSecretValidator.cs
+
 ## Client assertion, Private Key JWTs
+
+```csharp
+// This is the IdentityServer method
+    public static IIdentityServerBuilder AddJwtBearerClientAuthentication(this IIdentityServerBuilder builder)
+    {
+        builder.AddSecretParser<JwtBearerClientAssertionSecretParser>();
+        builder.AddSecretValidator<PrivateKeyJwtSecretValidator>();
+
+        return builder;
+    }
+
+// So do this instead of a call to AddJwtBearerClientAuthentication
+builder.AddSecretParser<JwtBearerClientAssertionSecretParser>();
+builder.AddSecretValidator<YourSecretValidator>(); // TODO, create your secret validator class
+```
+
 
 ## Migrations
 
@@ -21,5 +43,7 @@ https://docs.duendesoftware.com/identityserver/v7/tokens/authentication/jwt/
 https://docs.duendesoftware.com/identityserver/v7/reference/validators/custom_token_request_validator/
 
 https://docs.duendesoftware.com/identityserver/v7/tokens/authentication/jwt/
+
+https://docs.duendesoftware.com/foss/accesstokenmanagement/advanced/client_assertions/
 
 https://www.scottbrady.io/oauth/removing-shared-secrets-for-oauth-client-authentication
