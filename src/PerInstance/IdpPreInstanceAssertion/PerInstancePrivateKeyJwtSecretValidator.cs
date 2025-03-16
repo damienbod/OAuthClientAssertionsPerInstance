@@ -52,6 +52,7 @@ public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
             return fail;
         }
 
+        // TODO get the correct public key using the claim
         List<SecurityKey> trustedKeys;
         try
         {
