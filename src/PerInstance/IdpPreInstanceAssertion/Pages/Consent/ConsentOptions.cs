@@ -2,7 +2,7 @@
 // See LICENSE in the project root for license information.
 
 
-namespace IdentityServer.Pages.Consent;
+namespace IdpPreInstanceAssertion.Pages.Consent;
 
 public class ConsentOptions
 {

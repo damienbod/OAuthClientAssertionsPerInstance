@@ -2,7 +2,7 @@
 using Duende.IdentityServer.Models;
 using System.Security.Cryptography.X509Certificates;
 
-namespace IdentityServer;
+namespace IdpPreInstanceAssertion;
 
 public static class Config
 {

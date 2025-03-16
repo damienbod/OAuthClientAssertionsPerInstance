@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 
-namespace IdentityServer.Pages.Ciba;
+namespace IdpPreInstanceAssertion.Pages.Ciba;
 
 [SecurityHeaders]
 [Authorize]

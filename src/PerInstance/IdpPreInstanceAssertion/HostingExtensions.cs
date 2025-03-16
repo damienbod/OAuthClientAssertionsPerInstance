@@ -1,14 +1,13 @@
 using Duende.IdentityServer.Validation;
-using IdentityServer.Data;
-using IdentityServer.Models;
-using IdpPreInstanceAssertion;
+using IdpPreInstanceAssertion.Data;
+using IdpPreInstanceAssertion.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Logging;
 using Serilog;
 
-namespace IdentityServer;
+namespace IdpPreInstanceAssertion;
 
 internal static class HostingExtensions
 {

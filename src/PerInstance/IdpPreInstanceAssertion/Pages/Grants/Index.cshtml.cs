@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 
-namespace IdentityServer.Pages.Grants;
+namespace IdpPreInstanceAssertion.Pages.Grants;
 
 [SecurityHeaders]
 [Authorize]

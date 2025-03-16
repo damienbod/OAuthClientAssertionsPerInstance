@@ -1,4 +1,4 @@
-namespace IdentityServer.Pages.Device;
+namespace IdpPreInstanceAssertion.Pages.Device;
 
 public class ViewModel
 {

@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace IdentityServer.Migrations
+namespace IdpPreInstanceAssertion.Migrations
 {
     /// <inheritdoc />
     public partial class InitializeApp : Migration

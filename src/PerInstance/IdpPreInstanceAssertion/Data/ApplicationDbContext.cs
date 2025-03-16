@@ -1,8 +1,8 @@
-﻿using IdentityServer.Models;
+﻿using IdpPreInstanceAssertion.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace IdentityServer.Data;
+namespace IdpPreInstanceAssertion.Data;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {

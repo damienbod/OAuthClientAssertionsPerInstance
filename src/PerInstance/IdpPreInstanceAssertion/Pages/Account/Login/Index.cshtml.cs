@@ -2,14 +2,14 @@ using Duende.IdentityServer.Events;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Stores;
-using IdentityServer.Models;
+using IdpPreInstanceAssertion.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace IdentityServer.Pages.Login;
+namespace IdpPreInstanceAssertion.Pages.Login;
 
 [SecurityHeaders]
 [AllowAnonymous]

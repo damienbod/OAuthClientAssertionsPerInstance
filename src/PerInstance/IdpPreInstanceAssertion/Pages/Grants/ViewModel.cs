@@ -1,4 +1,4 @@
-namespace IdentityServer.Pages.Grants;
+namespace IdpPreInstanceAssertion.Pages.Grants;
 
 public class ViewModel
 {

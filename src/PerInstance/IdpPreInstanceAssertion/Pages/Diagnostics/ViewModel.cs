@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authentication;
 using System.Text;
 using System.Text.Json;
 
-namespace IdentityServer.Pages.Diagnostics;
+namespace IdpPreInstanceAssertion.Pages.Diagnostics;
 
 public class ViewModel
 {

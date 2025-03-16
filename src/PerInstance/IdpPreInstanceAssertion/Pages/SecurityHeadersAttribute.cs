@@ -5,7 +5,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace IdentityServer.Pages;
+namespace IdpPreInstanceAssertion.Pages;
 
 public class SecurityHeadersAttribute : ActionFilterAttribute
 {

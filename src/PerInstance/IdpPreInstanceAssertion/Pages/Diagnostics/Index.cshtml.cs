@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace IdentityServer.Pages.Diagnostics;
+namespace IdpPreInstanceAssertion.Pages.Diagnostics;
 
 [SecurityHeaders]
 [Authorize]

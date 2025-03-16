@@ -1,4 +1,4 @@
-﻿using IdentityServer;
+﻿using IdpPreInstanceAssertion;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
