@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace IdpPreInstanceAssertion;
@@ -14,7 +13,7 @@ public class KeySessionService
 
     public async Task<(string? SessionId, SigningCredentials? SigningCredentials)> CreateGetSessionAsync()
     {
-        if(_inMemoryCache.SessionId != null)
+        if (_inMemoryCache.SessionId != null)
         {
             return _inMemoryCache;
         }
@@ -34,12 +33,15 @@ public class KeySessionService
         HttpContent content = new FormUrlEncodedContent(formData);
         var response = await httpClient.PostAsync("https://localhost:5101/api/Onboarding", content);
 
-        if(response.IsSuccessStatusCode)
+        if (response.IsSuccessStatusCode)
         {
             var signingCredentials = new SigningCredentials(rsaCertificateKey, "RS256");
             var sessionId = await response.Content.ReadAsStringAsync();
 
             _inMemoryCache = (sessionId, signingCredentials);
+
+            // TODO persist key in TPM and re-use
+
             return _inMemoryCache;
         }
 

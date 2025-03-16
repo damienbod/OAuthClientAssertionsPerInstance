@@ -1,7 +1,5 @@
-﻿using System.Security.Cryptography;
-using Duende.IdentityServer;
-using Duende.IdentityServer.Models;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
+using System.Security.Cryptography;
 
 namespace IdpPreInstanceAssertion;
 
@@ -11,7 +9,7 @@ public class PublicKeyService
 
     public string CreateSession(string publicKey)
     {
-        var sessionId =  RandomNumberGenerator.GetHexString(32);
+        var sessionId = RandomNumberGenerator.GetHexString(32);
 
         // Add to cache with 10 min lifespan
         // DDoS protection required
@@ -26,7 +24,7 @@ public class PublicKeyService
     public string GetPublicKey(string sessionId)
     {
         var data = _inMemoryCache.GetValueOrDefault(sessionId);
-        if(data != null)
+        if (data != null)
         {
             return data;
         }

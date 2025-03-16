@@ -18,7 +18,7 @@ public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
     /// <summary>
     /// Instantiates an instance of private_key_jwt secret validator
     /// </summary>
-    public PerInstancePrivateKeyJwtSecretValidator(IReplayCache replayCache, 
+    public PerInstancePrivateKeyJwtSecretValidator(IReplayCache replayCache,
         ILogger<PrivateKeyJwtSecretValidator> logger,
         PublicKeyService publicKeyService)
     {
@@ -57,12 +57,12 @@ public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
             "https://localhost:5101/connect/token"
         };
 
-        var sessionId = await GetSessionId(jwtTokenString);   
+        var sessionId = await GetSessionId(jwtTokenString);
         List<SecurityKey> trustedKeys;
         try
         {
             var securityKey = _publicKeyService.GetPublicSecurityKey(sessionId);
-            trustedKeys = [securityKey ];
+            trustedKeys = [securityKey];
             //trustedKeys = await secrets.GetKeysAsync();
         }
         catch (Exception e)
