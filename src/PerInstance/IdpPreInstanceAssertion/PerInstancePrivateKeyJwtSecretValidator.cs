@@ -10,7 +10,6 @@ namespace IdpPreInstanceAssertion;
 
 public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
 {
-    private readonly IHttpContextAccessor _contextAccessor;
     private readonly IReplayCache _replayCache;
     private readonly ILogger _logger;
     private readonly PublicKeyService _publicKeyService;
@@ -19,12 +18,10 @@ public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
     /// <summary>
     /// Instantiates an instance of private_key_jwt secret validator
     /// </summary>
-    public PerInstancePrivateKeyJwtSecretValidator(IHttpContextAccessor contextAccessor, 
-        IReplayCache replayCache, 
+    public PerInstancePrivateKeyJwtSecretValidator(IReplayCache replayCache, 
         ILogger<PrivateKeyJwtSecretValidator> logger,
         PublicKeyService publicKeyService)
     {
-        _contextAccessor = contextAccessor;
         _replayCache = replayCache;
         _logger = logger;
         _publicKeyService = publicKeyService;
