@@ -46,7 +46,8 @@ public class ClientAssertionService : IClientAssertionService
                 {
                     { JwtClaimTypes.JwtId, Guid.NewGuid().ToString() },
                     { JwtClaimTypes.Subject, options.ClientId! },
-                    { JwtClaimTypes.IssuedAt, DateTime.UtcNow.ToEpochTime() }
+                    { JwtClaimTypes.IssuedAt, DateTime.UtcNow.ToEpochTime() },
+                    { "MySessionId", "-my-id-to-get-public-key-for-user" }
                 }
             };
 
