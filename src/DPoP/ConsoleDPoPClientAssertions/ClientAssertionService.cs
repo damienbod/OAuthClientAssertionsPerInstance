@@ -1,14 +1,14 @@
 ﻿using Duende.AccessTokenManagement;
-using Duende.IdentityModel.Client;
 using Duende.IdentityModel;
+using Duende.IdentityModel.Client;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 
 namespace ConsoleDPoPClientAssertions;
 

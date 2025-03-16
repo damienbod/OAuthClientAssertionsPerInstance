@@ -24,7 +24,7 @@ public class DPoPClient : BackgroundService
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         await Task.Delay(2000, stoppingToken);
-            
+
         while (!stoppingToken.IsCancellationRequested)
         {
             Console.WriteLine("\n\n");
@@ -32,11 +32,11 @@ public class DPoPClient : BackgroundService
 
             var client = _clientFactory.CreateClient("mobile-dpop-client");
             var response = await client.GetAsync("api/values", stoppingToken);
-                
+
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync(stoppingToken);
-                _logger.LogInformation("API response: {response}", content);    
+                _logger.LogInformation("API response: {response}", content);
             }
             else
             {

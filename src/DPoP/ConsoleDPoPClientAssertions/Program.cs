@@ -1,12 +1,12 @@
+using Duende.AccessTokenManagement;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Serilog;
-using System;
-using Serilog.Sinks.SystemConsole.Themes;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
+using Serilog.Sinks.SystemConsole.Themes;
+using System;
 using System.Security.Cryptography;
 using System.Text.Json;
-using Duende.AccessTokenManagement;
 
 namespace ConsoleDPoPClientAssertions;
 
@@ -28,7 +28,7 @@ public class Program
     {
         var host = Host.CreateDefaultBuilder(args)
             .UseSerilog()
-                
+
             .ConfigureServices((services) =>
             {
                 services.AddDistributedMemoryCache();

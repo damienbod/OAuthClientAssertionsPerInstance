@@ -22,16 +22,16 @@ public static class Config
     {
         var publicPem = File.ReadAllText(Path.Combine(environment.ContentRootPath, "rsa256-public.pem"));
         var rsaCertificate = X509Certificate2.CreateFromPem(publicPem);
-       
+
         return
         [
             new Client
             {
                 ClientId = "mobile-client",
-                ClientName = "Mobile client", 
+                ClientName = "Mobile client",
 
                 AllowedGrantTypes = GrantTypes.ClientCredentials,
-                ClientSecrets = 
+                ClientSecrets =
                 [
                     new Secret
                     {

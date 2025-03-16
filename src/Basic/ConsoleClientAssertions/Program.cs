@@ -45,7 +45,7 @@ static async Task<TokenResponse> RequestTokenAsync(SigningCredentials signingCre
             Value = clientToken
         },
 
-        Scope = "mobile", 
+        Scope = "mobile",
     });
 
     if (response.IsError) throw new Exception(response.Error);
