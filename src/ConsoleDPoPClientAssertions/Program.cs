@@ -14,7 +14,7 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        Console.Title = "Client";
+        Console.Title = "DPoP client with client assertions";
 
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
@@ -37,7 +37,7 @@ public class Program
                 // https://docs.duendesoftware.com/foss/accesstokenmanagement/advanced/client_assertions/
 
                 services.AddClientCredentialsTokenManagement()
-                    .AddClient("dpop", client =>
+                    .AddClient("mobile-dpop-client", client =>
                     {
                         client.TokenEndpoint = "https://localhost:5001/connect/token";
 
@@ -49,7 +49,7 @@ public class Program
                         client.DPoPJsonWebKey = CreateDPoPKey();
                     });
 
-                services.AddClientCredentialsHttpClient("client", "mobile-dpop-client", client =>
+                services.AddClientCredentialsHttpClient("mobile-dpop-client", "mobile-dpop-client", client =>
                 {
                     client.BaseAddress = new Uri("https://localhost:5005/");
                 });

@@ -31,7 +31,7 @@ public class DPoPClient : BackgroundService
             _logger.LogInformation("DPoPClient running at: {time}", DateTimeOffset.UtcNow);
 
             var client = _clientFactory.CreateClient("mobile-dpop-client");
-            var response = await client.GetAsync("identity", stoppingToken);
+            var response = await client.GetAsync("values", stoppingToken);
                 
             if (response.IsSuccessStatusCode)
             {
