@@ -81,11 +81,11 @@ static async Task CallServiceAsync(string token)
 {
     var client = new HttpClient
     {
-        BaseAddress = new Uri("https://localhost:5003/")
+        BaseAddress = new Uri("https://localhost:5007/")
     };
 
     client.SetBearerToken(token);
-    var response = await client.GetStringAsync("identity");
+    var response = await client.GetStringAsync("api/values");
 
     "\n\nService claims:".ConsoleGreen();
     Console.WriteLine(response.PrettyPrintJson());
