@@ -1,5 +1,7 @@
+using Duende.IdentityServer.Validation;
 using IdentityServer.Data;
 using IdentityServer.Models;
+using IdpPreInstanceAssertion;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.JsonWebTokens;
@@ -40,7 +42,8 @@ internal static class HostingExtensions
             .AddInMemoryClients(Config.Clients(builder.Environment))
             .AddAspNetIdentity<ApplicationUser>();
 
-        idsvrBuilder.AddJwtBearerClientAuthentication();
+        idsvrBuilder.AddSecretParser<JwtBearerClientAssertionSecretParser>();
+        idsvrBuilder.AddSecretValidator<PerInstancePrivateKeyJwtSecretValidator>();
 
         return builder.Build();
     }

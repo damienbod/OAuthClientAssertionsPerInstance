@@ -402,3 +402,5 @@ FodyWeavers.xsd
 /src/_logs-identityServer.txt
 /LogFiles/_logs-identityServer.txt
 **_logs-api.txt
+/src/PerInstance/IdpPreInstanceAssertion/keys/
+/src/LogFiles/
