@@ -60,7 +60,7 @@ public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
             "https://localhost:5101/connect/token"
         };
 
-        var sessionId = GetSessionId(parsedSecret, jwtTokenString, validAudiences);
+        var sessionId = await GetSessionId(jwtTokenString);
         List<SecurityKey> trustedKeys;
         try
         {
@@ -140,47 +140,32 @@ public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
         }
     }
 
-    private string GetSessionId (ParsedSecret parsedSecret, string jwtTokenString, string [] validAudiences )
+    public static async Task<string> GetSessionId(string jwtTokenString)
     {
-        var tokenValidationParameters = new TokenValidationParameters
+        // multi-tenant app, tenantId is not required in the first step
+        // token is validated in second step.
+        // TenantId is required for metaaddress to validate the signature
+        // Explicit validation of allow tenant list is required
+        var validationParameters = new TokenValidationParameters
         {
+            RequireExpirationTime = false,
+            ValidateLifetime = false,
+            RequireSignedTokens = false,
             ValidateIssuerSigningKey = false,
-  
-
-            ValidIssuer = parsedSecret.Id,
-            ValidateIssuer = true,
-
-            ValidAudiences = validAudiences,
-            ValidateAudience = true,
-
-            RequireExpirationTime = true,
-
-            ClockSkew = TimeSpan.FromMinutes(5),
-
-            // disable signature validation, we validate this in the second step, once we know which public key should be used.
+            ValidateIssuer = false,
+            ValidateAudience = false,
             SignatureValidator = (token, _) => new JsonWebToken(token)
         };
 
-        try
+        var tokenValidator = new JsonWebTokenHandler
         {
-            var handler = new JwtSecurityTokenHandler();
-            handler.ValidateToken(jwtTokenString, tokenValidationParameters, out var token);
+            MapInboundClaims = false
+        };
 
-            var jwtToken = (JwtSecurityToken)token;
+        var tokenValidationResult = await tokenValidator.ValidateTokenAsync(jwtTokenString, validationParameters);
 
-            var sessionIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "AppSessionId");
-            if (sessionIdClaim == null)
-            {
-                _logger.LogError("sessionIdClaim is missing.");
-            }
+        var sessionIdClaim = tokenValidationResult.Claims.FirstOrDefault(c => c.Key == "AppSessionId");
 
-            return sessionIdClaim.Value;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "JWT token missing sessionId");
-        }
-
-        return null;
+        return sessionIdClaim.Value.ToString();
     }
 }
