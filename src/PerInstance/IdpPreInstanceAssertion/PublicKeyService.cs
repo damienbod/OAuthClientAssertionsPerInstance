@@ -37,22 +37,6 @@ public class PublicKeyService
     /// <summary>
     /// Get public key from cache
     /// </summary>
-    public Secret GetSecret(string sessionId)
-    {
-        var keyData = _inMemoryCache.GetValueOrDefault(sessionId);
-        if (keyData != null)
-        {
-            return new Secret
-            {
-                // X509 cert base64-encoded
-                Type = IdentityServerConstants.SecretTypes.X509CertificateBase64,
-                Value = keyData
-            };
-        }
-
-        throw new ArgumentNullException(nameof(sessionId), "something went wrong");
-    }
-
     public SecurityKey GetPublicSecurityKey(string sessionId)
     {
         var publicKeyPem = _inMemoryCache.GetValueOrDefault(sessionId);

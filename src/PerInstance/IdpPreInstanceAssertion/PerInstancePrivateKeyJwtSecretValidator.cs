@@ -57,11 +57,11 @@ public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
             "https://localhost:5101/connect/token"
         };
 
-        var sessionId = await GetSessionId(jwtTokenString);
-        var securityKey = _publicKeyService.GetPublicSecurityKey(sessionId);
+        var sessionId = await GetSessionId(jwtTokenString);   
         List<SecurityKey> trustedKeys;
         try
         {
+            var securityKey = _publicKeyService.GetPublicSecurityKey(sessionId);
             trustedKeys = [securityKey ];
             //trustedKeys = await secrets.GetKeysAsync();
         }
