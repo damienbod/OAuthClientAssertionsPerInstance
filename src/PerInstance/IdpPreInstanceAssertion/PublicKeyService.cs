@@ -1,6 +1,4 @@
-﻿using System.Runtime.ConstrainedExecution;
-using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
+﻿using System.Security.Cryptography;
 using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
 using Microsoft.IdentityModel.Tokens;
@@ -13,8 +11,6 @@ public class PublicKeyService
 
     public string CreateSession(string publicKey)
     {
-        // TODO validate publicKey
-
         var sessionId =  RandomNumberGenerator.GetHexString(32);
 
         // Add to cache with 10 min lifespan
@@ -59,13 +55,15 @@ public class PublicKeyService
 
     public SecurityKey GetPublicSecurityKey(string sessionId)
     {
-        var keyData = _inMemoryCache.GetValueOrDefault(sessionId);
-        if (keyData != null)
+        var publicKeyPem = _inMemoryCache.GetValueOrDefault(sessionId);
+        if (publicKeyPem != null)
         {
-            byte[] keyDataByte = Convert.FromBase64String(keyData);
-            var cert = X509CertificateLoader.LoadCertificate(keyDataByte);
+            RsaSecurityKey securityKey;
+            var key = RSA.Create();
+            key.ImportFromPem(publicKeyPem);
+            securityKey = new RsaSecurityKey(key);
 
-            return new  X509SecurityKey(cert);
+            return securityKey;
         }
 
         throw new ArgumentNullException(nameof(sessionId), "something went wrong");

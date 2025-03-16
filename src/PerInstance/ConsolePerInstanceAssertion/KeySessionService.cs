@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace IdpPreInstanceAssertion;
@@ -20,14 +21,13 @@ public class KeySessionService
 
         var cert = RSA.Create(2048);
         var rsaCertificateKey = new RsaSecurityKey(cert);
-        var publicKey = cert.ExportRSAPublicKey();
-        var pKeyBase64 = Convert.ToBase64String(publicKey);
+        var publicKeyPem = cert.ExportRSAPublicKeyPem();
 
         var httpClient = new HttpClient();
 
         var formData = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>("publicKey", pKeyBase64)
+                new KeyValuePair<string, string>("publicKey", publicKeyPem)
             };
 
         // Encodes the key-value pairs for the ContentType 'application/x-www-form-urlencoded'

@@ -61,10 +61,11 @@ public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
         };
 
         var sessionId = await GetSessionId(jwtTokenString);
+        var securityKey = _publicKeyService.GetPublicSecurityKey(sessionId);
         List<SecurityKey> trustedKeys;
         try
         {
-            trustedKeys = [_publicKeyService.GetPublicSecurityKey(sessionId)];
+            trustedKeys = [securityKey ];
             //trustedKeys = await secrets.GetKeysAsync();
         }
         catch (Exception e)
