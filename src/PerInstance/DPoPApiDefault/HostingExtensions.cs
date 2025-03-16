@@ -53,7 +53,7 @@ internal static class HostingExtensions
             });
 
         // layers DPoP onto the "token" scheme above
-        builder.Services.ConfigureDPoPTokensForScheme("token", opt =>
+        builder.Services.ConfigureDPoPTokensForScheme("dpoptokenscheme", opt =>
         {
             // Chose a validation mode: either Nonce or IssuedAt. With nonce validation,
             // the api supplies a nonce that must be used to prove that the token was
