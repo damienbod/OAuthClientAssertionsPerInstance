@@ -15,6 +15,8 @@ internal static class HostingExtensions
     {
         JsonWebTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
+        builder.Services.AddTransient<PublicKeyService>();
+
         builder.Services.AddRazorPages();
 
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");

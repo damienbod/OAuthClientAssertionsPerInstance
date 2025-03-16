@@ -12,7 +12,7 @@ public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
     private readonly IHttpContextAccessor _contextAccessor;
     private readonly IReplayCache _replayCache;
     private readonly ILogger _logger;
-
+    private readonly PublicKeyService _publicKeyService;
     private const string Purpose = nameof(PrivateKeyJwtSecretValidator);
 
     /// <summary>
@@ -20,11 +20,13 @@ public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
     /// </summary>
     public PerInstancePrivateKeyJwtSecretValidator(IHttpContextAccessor contextAccessor, 
         IReplayCache replayCache, 
-        ILogger<PrivateKeyJwtSecretValidator> logger)
+        ILogger<PrivateKeyJwtSecretValidator> logger,
+        PublicKeyService publicKeyService)
     {
         _contextAccessor = contextAccessor;
         _replayCache = replayCache;
         _logger = logger;
+        _publicKeyService = publicKeyService;
     }
 
     /// <summary>
