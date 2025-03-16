@@ -46,6 +46,8 @@ internal static class HostingExtensions
         idsvrBuilder.AddSecretParser<JwtBearerClientAssertionSecretParser>();
         idsvrBuilder.AddSecretValidator<PerInstancePrivateKeyJwtSecretValidator>();
 
+        builder.Services.AddControllers();
+
         return builder.Build();
     }
 
@@ -66,6 +68,10 @@ internal static class HostingExtensions
         app.UseAuthorization();
 
         app.MapRazorPages()
+            .RequireAuthorization();
+
+
+        app.MapControllers()
             .RequireAuthorization();
 
         return app;

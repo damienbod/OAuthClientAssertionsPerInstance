@@ -1,5 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
@@ -23,7 +24,16 @@ public class KeySessionService
         var pKeyBase64 = Convert.ToBase64String(publicKey);
 
         var httpClient = new HttpClient();
-        var response = await httpClient.PostAsync("https://localhost:5001/api/Onboarding", new StringContent(pKeyBase64));
+
+        var formData = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("publicKey", pKeyBase64)
+            };
+
+        // Encodes the key-value pairs for the ContentType 'application/x-www-form-urlencoded'
+        HttpContent content = new FormUrlEncodedContent(formData);
+        var response = await httpClient.PostAsync("https://localhost:5101/api/Onboarding", content);
+
         if(response.IsSuccessStatusCode)
         {
             var signingCredentials = new SigningCredentials(rsaCertificateKey, "RS256");

@@ -1,6 +1,9 @@
-﻿using System.Security.Cryptography;
+﻿using System.Runtime.ConstrainedExecution;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
+using Microsoft.IdentityModel.Tokens;
 
 namespace IdpPreInstanceAssertion;
 
@@ -38,7 +41,7 @@ public class PublicKeyService
     /// <summary>
     /// Get public key from cache
     /// </summary>
-    public Secret GetPublicKeySecret(string sessionId)
+    public Secret GetSecret(string sessionId)
     {
         var keyData = _inMemoryCache.GetValueOrDefault(sessionId);
         if (keyData != null)
@@ -49,6 +52,20 @@ public class PublicKeyService
                 Type = IdentityServerConstants.SecretTypes.X509CertificateBase64,
                 Value = keyData
             };
+        }
+
+        throw new ArgumentNullException(nameof(sessionId), "something went wrong");
+    }
+
+    public SecurityKey GetPublicSecurityKey(string sessionId)
+    {
+        var keyData = _inMemoryCache.GetValueOrDefault(sessionId);
+        if (keyData != null)
+        {
+            byte[] keyDataByte = Convert.FromBase64String(keyData);
+            var cert = X509CertificateLoader.LoadCertificate(keyDataByte);
+
+            return new  X509SecurityKey(cert);
         }
 
         throw new ArgumentNullException(nameof(sessionId), "something went wrong");

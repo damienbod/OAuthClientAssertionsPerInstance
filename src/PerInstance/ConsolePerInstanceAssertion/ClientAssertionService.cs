@@ -1,6 +1,7 @@
 ﻿using Duende.AccessTokenManagement;
 using Duende.IdentityModel;
 using Duende.IdentityModel.Client;
+using IdpPreInstanceAssertion;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
@@ -15,24 +16,28 @@ namespace ConsoleDPoPClientAssertions;
 public class ClientAssertionService : IClientAssertionService
 {
     private readonly IOptionsSnapshot<ClientCredentialsClient> _options;
+    private readonly KeySessionService _keySessionService;
 
-    public ClientAssertionService(IOptionsSnapshot<ClientCredentialsClient> options)
+    public ClientAssertionService(IOptionsSnapshot<ClientCredentialsClient> options,
+        KeySessionService keySessionService)
     {
         _options = options;
+        _keySessionService = keySessionService;
     }
 
-    public Task<ClientAssertion?> GetClientAssertionAsync(
+    public async Task<ClientAssertion?> GetClientAssertionAsync(
       string? clientName = null, TokenRequestParameters? parameters = null)
     {
         if (clientName == "mobile-dpop-client")
         {
             // client assertion
-            var privatePem = File.ReadAllText(Path.Combine("", "rsa256-private.pem"));
-            var publicPem = File.ReadAllText(Path.Combine("", "rsa256-public.pem"));
-            var rsaCertificate = X509Certificate2.CreateFromPem(publicPem, privatePem);
-            var rsaCertificateKey = new RsaSecurityKey(rsaCertificate.GetRSAPrivateKey());
-            var signingCredentials = new SigningCredentials(new X509SecurityKey(rsaCertificate), "RS256");
+            //var privatePem = File.ReadAllText(Path.Combine("", "rsa256-private.pem"));
+            //var publicPem = File.ReadAllText(Path.Combine("", "rsa256-public.pem"));
+            //var rsaCertificate = X509Certificate2.CreateFromPem(publicPem, privatePem);
+            //var rsaCertificateKey = new RsaSecurityKey(rsaCertificate.GetRSAPrivateKey());
+            //var signingCredentials = new SigningCredentials(new X509SecurityKey(rsaCertificate), "RS256");
 
+            var key = await _keySessionService.CreateGetSessionAsync();
             var options = _options.Get(clientName);
 
             var descriptor = new SecurityTokenDescriptor
@@ -40,28 +45,28 @@ public class ClientAssertionService : IClientAssertionService
                 Issuer = options.ClientId,
                 Audience = options.TokenEndpoint,
                 Expires = DateTime.UtcNow.AddMinutes(1),
-                SigningCredentials = signingCredentials,
+                SigningCredentials = key.SigningCredentials,
 
                 Claims = new Dictionary<string, object>
                 {
                     { JwtClaimTypes.JwtId, Guid.NewGuid().ToString() },
                     { JwtClaimTypes.Subject, options.ClientId! },
                     { JwtClaimTypes.IssuedAt, DateTime.UtcNow.ToEpochTime() },
-                    { "MySessionId", "-my-id-to-get-public-key-for-user" }
+                    { "AppSessionId", key.SessionId! }
                 }
             };
 
             var handler = new JsonWebTokenHandler();
             var jwt = handler.CreateToken(descriptor);
 
-            return Task.FromResult<ClientAssertion?>(new ClientAssertion
+            return await Task.FromResult<ClientAssertion?>(new ClientAssertion
             {
                 Type = OidcConstants.ClientAssertionTypes.JwtBearer,
                 Value = jwt
             });
         }
 
-        return Task.FromResult<ClientAssertion?>(null);
+        return await Task.FromResult<ClientAssertion?>(null);
     }
 }
 

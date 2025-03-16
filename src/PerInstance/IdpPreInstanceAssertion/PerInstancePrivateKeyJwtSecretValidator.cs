@@ -2,6 +2,7 @@
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Validation;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -54,12 +55,17 @@ public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
             return fail;
         }
 
+        var validAudiences = new[]
+        {
+            "https://localhost:5101/connect/token"
+        };
+
+        var sessionId = GetSessionId(parsedSecret, jwtTokenString, validAudiences);
         List<SecurityKey> trustedKeys;
         try
         {
-            // TODO get the correct public key using the claim
-            //trustedKeys = [_publicKeyService.GetPublicKeySecret(sessionId)];
-            trustedKeys = await secrets.GetKeysAsync();
+            trustedKeys = [_publicKeyService.GetPublicSecurityKey(sessionId)];
+            //trustedKeys = await secrets.GetKeysAsync();
         }
         catch (Exception e)
         {
@@ -72,11 +78,6 @@ public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
             _logger.LogError("There are no keys available to validate client assertion.");
             return fail;
         }
-
-        var validAudiences = new[]
-        {
-            "https://localhost:5101/connect/token"
-        };
 
         var tokenValidationParameters = new TokenValidationParameters
         {
@@ -139,4 +140,47 @@ public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
         }
     }
 
+    private string GetSessionId (ParsedSecret parsedSecret, string jwtTokenString, string [] validAudiences )
+    {
+        var tokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = false,
+  
+
+            ValidIssuer = parsedSecret.Id,
+            ValidateIssuer = true,
+
+            ValidAudiences = validAudiences,
+            ValidateAudience = true,
+
+            RequireExpirationTime = true,
+
+            ClockSkew = TimeSpan.FromMinutes(5),
+
+            // disable signature validation, we validate this in the second step, once we know which public key should be used.
+            SignatureValidator = (token, _) => new JsonWebToken(token)
+        };
+
+        try
+        {
+            var handler = new JwtSecurityTokenHandler();
+            handler.ValidateToken(jwtTokenString, tokenValidationParameters, out var token);
+
+            var jwtToken = (JwtSecurityToken)token;
+
+            var sessionIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "AppSessionId");
+            if (sessionIdClaim == null)
+            {
+                _logger.LogError("sessionIdClaim is missing.");
+            }
+
+            return sessionIdClaim.Value;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "JWT token missing sessionId");
+        }
+
+        return null;
+    }
 }
