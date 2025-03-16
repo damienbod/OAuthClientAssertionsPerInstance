@@ -1,4 +1,4 @@
-﻿namespace DPoPApi;
+﻿namespace DPoPApiDefault;
 
 public static class SecurityHeadersDefinitionsAPI
 {

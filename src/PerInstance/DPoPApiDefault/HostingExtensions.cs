@@ -6,7 +6,7 @@ using Microsoft.OpenApi.Models;
 using NetEscapades.AspNetCore.SecurityHeaders.Infrastructure;
 using Serilog;
 
-namespace DPoPApi;
+namespace DPoPApiDefault;
 
 internal static class HostingExtensions
 {

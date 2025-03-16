@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DPoPApi.Controllers;
+namespace DPoPApiDefault.Controllers;
 
 [Authorize(Policy = "protectedScope")]
 [Route("api/[controller]")]
