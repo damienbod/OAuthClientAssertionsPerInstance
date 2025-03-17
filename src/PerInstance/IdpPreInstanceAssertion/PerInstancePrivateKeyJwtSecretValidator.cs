@@ -57,18 +57,26 @@ public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
             "https://localhost:5101/connect/token"
         };
 
-        var sessionId = await GetSessionId(jwtTokenString);
         List<SecurityKey> trustedKeys;
-        try
+        if ("mobile-dpop-client" == parsedSecret.Id)
         {
+            // client assertion using instance public key
+            var sessionId = GetSessionId(jwtTokenString);
             var securityKey = _publicKeyService.GetPublicSecurityKey(sessionId);
             trustedKeys = [securityKey];
-            //trustedKeys = await secrets.GetKeysAsync();
         }
-        catch (Exception e)
+        else
         {
-            _logger.LogError(e, "Could not parse secrets");
-            return fail;
+            // Default client assertions
+            try
+            {
+                trustedKeys = await secrets.GetKeysAsync();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Could not parse secrets");
+                return fail;
+            }
         }
 
         if (!trustedKeys.Any())
@@ -138,32 +146,19 @@ public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
         }
     }
 
-    public static async Task<string> GetSessionId(string jwtTokenString)
+    private string GetSessionId(string token)
     {
-        // multi-tenant app, tenantId is not required in the first step
-        // token is validated in second step.
-        // TenantId is required for metaaddress to validate the signature
-        // Explicit validation of allow tenant list is required
-        var validationParameters = new TokenValidationParameters
+        try
         {
-            RequireExpirationTime = false,
-            ValidateLifetime = false,
-            RequireSignedTokens = false,
-            ValidateIssuerSigningKey = false,
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            SignatureValidator = (token, _) => new JsonWebToken(token)
-        };
+            var jwt = new JwtSecurityToken(token);
+            var sessionIdClaim = jwt.Claims.FirstOrDefault(c => c.Type == "AppSessionId");
 
-        var tokenValidator = new JsonWebTokenHandler
+            return sessionIdClaim.Value.ToString();
+        }
+        catch (Exception e)
         {
-            MapInboundClaims = false
-        };
-
-        var tokenValidationResult = await tokenValidator.ValidateTokenAsync(jwtTokenString, validationParameters);
-
-        var sessionIdClaim = tokenValidationResult.Claims.FirstOrDefault(c => c.Key == "AppSessionId");
-
-        return sessionIdClaim.Value.ToString();
+            _logger.LogWarning(e, "AppSessionId");
+            return null;
+        }
     }
 }
