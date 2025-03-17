@@ -70,7 +70,6 @@ internal static class HostingExtensions
         app.MapRazorPages()
             .RequireAuthorization();
 
-
         app.MapControllers()
             .RequireAuthorization();
 
