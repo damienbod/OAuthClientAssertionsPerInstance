@@ -7,8 +7,16 @@ using System.Threading.Tasks;
 
 namespace ConsoleDPoPClientAssertions;
 
+/// <summary>
+/// Creates a new key for the application client assertion.
+/// The public key is exchanged with the IDP and connected with a session.
+/// The application should validate more identity data like an email, sms and connect this to the session.
+/// </summary>
 public class KeySessionService
 {
+    /// <summary>
+    /// One signing key per application instance
+    /// </summary>
     private static (string? SessionId, SigningCredentials? SigningCredentials) _inMemoryCache = (null, null);
 
     public async Task<(string? SessionId, SigningCredentials? SigningCredentials)> CreateGetSessionAsync()
