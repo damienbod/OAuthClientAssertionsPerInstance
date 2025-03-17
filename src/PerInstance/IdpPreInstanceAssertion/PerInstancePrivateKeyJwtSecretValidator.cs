@@ -1,13 +1,12 @@
-﻿using Duende.IdentityServer.Configuration;
+﻿using Duende.IdentityServer;
+using Duende.IdentityServer.Configuration;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
+using Duende.IdentityServer.Validation;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
-using static Duende.IdentityServer.IdentityServerConstants;
-
-using Duende.IdentityServer;
-using Duende.IdentityServer.Validation;
 using System.IdentityModel.Tokens.Jwt;
+using static Duende.IdentityServer.IdentityServerConstants;
 
 namespace IdpPreInstanceAssertion;
 
@@ -250,7 +249,7 @@ public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
         return false;
     }
 
-   
+
 }
 
 /// <summary>

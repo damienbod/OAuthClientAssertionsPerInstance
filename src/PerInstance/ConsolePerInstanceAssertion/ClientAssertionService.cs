@@ -1,7 +1,6 @@
 ﻿using Duende.AccessTokenManagement;
 using Duende.IdentityModel;
 using Duende.IdentityModel.Client;
-using IdpPreInstanceAssertion;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;

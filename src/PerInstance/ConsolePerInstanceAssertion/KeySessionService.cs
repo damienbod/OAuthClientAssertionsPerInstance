@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 
-namespace IdpPreInstanceAssertion;
+namespace ConsoleDPoPClientAssertions;
 
 public class KeySessionService
 {

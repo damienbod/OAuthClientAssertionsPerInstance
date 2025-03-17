@@ -5,7 +5,7 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateBootstrapLogger();
 
-Log.Information("Starting up API");
+Log.Information("Starting up DPoPApiDefault");
 
 try
 {
@@ -13,7 +13,7 @@ try
 
     builder.Host.UseSerilog((ctx, lc) => lc
         .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
-        .WriteTo.File("../../LogFiles/_logs-api.txt")
+        .WriteTo.File("../../LogFiles/_logs-DPoPApiDefault.txt")
         .Enrich.FromLogContext()
         .ReadFrom.Configuration(ctx.Configuration));
 
