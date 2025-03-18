@@ -17,9 +17,8 @@ public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
     private readonly IdentityServerOptions _options;
     private readonly ILogger _logger;
     private bool UseStrictClientAssertionAudienceValidation = false;
-
     private readonly PublicKeyService _publicKeyService;
-
+    private readonly IHttpContextAccessor _httpContextAccessor;
     private const string Purpose = nameof(PrivateKeyJwtSecretValidator);
 
     /// <summary>
@@ -31,7 +30,8 @@ public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
         IServerUrls urls,
         IdentityServerOptions options,
         ILogger<PerInstancePrivateKeyJwtSecretValidator> logger,
-        PublicKeyService publicKeyService)
+        PublicKeyService publicKeyService,
+        IHttpContextAccessor httpContextAccessor)
     {
         _issuerNameService = issuerNameService;
         _replayCache = replayCache;
@@ -39,6 +39,7 @@ public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
         _options = options;
         _logger = logger;
         _publicKeyService = publicKeyService;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     /// <summary>
@@ -70,9 +71,16 @@ public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
         if ("mobile-dpop-client" == parsedSecret.Id || "onboarding-user-client" == parsedSecret.Id)
         {
             // client assertion using instance public key
-            var sessionId = GetSessionIdFromClientAssertion(jwtTokenString);
-            var securityKey = _publicKeyService.GetPublicSecurityKey(sessionId);
+            var sessionIdFromAssertion = GetSessionIdFromClientAssertion(jwtTokenString);
+            var securityKey = _publicKeyService.GetPublicSecurityKey(sessionIdFromAssertion);
             trustedKeys = [securityKey];
+
+            var scopeSessionId = GetSessionIdFromRequestedScope(_httpContextAccessor.HttpContext);
+            if (!sessionIdFromAssertion.Equals(scopeSessionId))
+            {
+                _logger.LogError("scope sessionId incorrect");
+                return fail;
+            }
         }
         else
         {
@@ -184,6 +192,20 @@ public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
         }
 
         return success;
+    }
+
+    private string GetSessionIdFromRequestedScope(HttpContext httpContext)
+    {
+        var form = httpContext.Request.Form.FirstOrDefault(c => c.Key == "scope");
+        var scopes = form.Value.ToString().Split(" ");
+        var scope = scopes.FirstOrDefault(s => s.StartsWith("sessionId"));
+        if(scope != null)
+        {
+            var sessionId = scope.Replace("sessionId:", "");
+            return sessionId;
+        }
+
+        return string.Empty;
     }
 
     private string GetSessionIdFromClientAssertion(string token)
