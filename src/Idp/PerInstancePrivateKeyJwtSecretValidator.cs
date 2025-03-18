@@ -70,7 +70,7 @@ public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
         if ("mobile-dpop-client" == parsedSecret.Id || "onboarding-user-client" == parsedSecret.Id)
         {
             // client assertion using instance public key
-            var sessionId = GetSessionId(jwtTokenString);
+            var sessionId = GetSessionIdFromClientAssertion(jwtTokenString);
             var securityKey = _publicKeyService.GetPublicSecurityKey(sessionId);
             trustedKeys = [securityKey];
         }
@@ -186,7 +186,7 @@ public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
         return success;
     }
 
-    private string GetSessionId(string token)
+    private string GetSessionIdFromClientAssertion(string token)
     {
         try
         {
