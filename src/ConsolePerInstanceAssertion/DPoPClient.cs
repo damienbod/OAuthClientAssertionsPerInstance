@@ -32,8 +32,8 @@ public class DPoPClient : BackgroundService
             _logger.LogInformation("DPoPClient running at: {time}", DateTimeOffset.UtcNow);
 
 
-            // Onobarding API
-            var onboardingClient = _clientFactory.CreateClient("OnboardingUserClient");
+            // Onobarding User API
+            var onboardingClient = _clientFactory.CreateClient("onboarding-user-client");
             var formData = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>("sessionId", "teste3e")
@@ -44,7 +44,7 @@ public class DPoPClient : BackgroundService
 
 
             // Call mobile API
-            var client = _clientFactory.CreateClient("DPoPApiDefaultClient");
+            var client = _clientFactory.CreateClient("mobile-dpop-client");
             var response = await client.GetAsync("api/values", stoppingToken);
 
             if (response.IsSuccessStatusCode)
