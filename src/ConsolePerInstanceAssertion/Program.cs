@@ -8,7 +8,7 @@ using System;
 using System.Security.Cryptography;
 using System.Text.Json;
 
-namespace ConsoleDPoPClientAssertions;
+namespace ConsolePerInstanceAssertion;
 
 public class Program
 {
@@ -32,7 +32,9 @@ public class Program
             .ConfigureServices((services) =>
             {
                 services.AddDistributedMemoryCache();
-                services.AddSingleton<KeySessionService>();
+
+                var rsa2048 = RSA.Create(2048);
+                services.AddSingleton<KeySessionService>(t => new KeySessionService(rsa2048));
 
                 services.AddScoped<IClientAssertionService, ClientAssertionService>();
                 // https://docs.duendesoftware.com/foss/accesstokenmanagement/advanced/client_assertions/
@@ -47,7 +49,7 @@ public class Program
                         //client.ClientSecret = "905e4892-7610-44cb-a122-6209b38c882f";
 
                         client.Scope = "DPoPApiDefaultScope";
-                        client.DPoPJsonWebKey = CreateDPoPKey();
+                        client.DPoPJsonWebKey = CreateDPoPKey(rsa2048);
                     })
                     .AddClient("onboarding-user-client", client =>
                     {
@@ -58,7 +60,7 @@ public class Program
                         //client.ClientSecret = "905e4892-7610-44cb-a122-6209b38c882f";
 
                         client.Scope = "OnboardingUserScope";
-                        client.DPoPJsonWebKey = CreateDPoPKey();
+                        client.DPoPJsonWebKey = CreateDPoPKey(rsa2048);
                     });
 
                 services.AddClientCredentialsHttpClient("mobile-dpop-client", "mobile-dpop-client", client =>
@@ -76,9 +78,9 @@ public class Program
         return host;
     }
 
-    private static string CreateDPoPKey()
+    private static string CreateDPoPKey(RSA rsa2048)
     {
-        var key = new RsaSecurityKey(RSA.Create(2048));
+        var key = new RsaSecurityKey(rsa2048);
         var jwk = JsonWebKeyConverter.ConvertFromRSASecurityKey(key);
         jwk.Alg = "PS256";
         var jwkJson = JsonSerializer.Serialize(jwk);

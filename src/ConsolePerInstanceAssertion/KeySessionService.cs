@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 
-namespace ConsoleDPoPClientAssertions;
+namespace ConsolePerInstanceAssertion;
 
 /// <summary>
 /// Creates a new key for the application client assertion.
@@ -18,6 +18,13 @@ public class KeySessionService
     /// One signing key per application instance
     /// </summary>
     private static (string? SessionId, SigningCredentials? SigningCredentials) _inMemoryCache = (null, null);
+    
+    private RSA _rsa2048;
+
+    public KeySessionService(RSA rsa2048)
+    {
+        _rsa2048 = rsa2048;
+    }
 
     public async Task<(string? SessionId, SigningCredentials? SigningCredentials)> CreateGetSessionAsync()
     {
@@ -26,9 +33,8 @@ public class KeySessionService
             return _inMemoryCache;
         }
 
-        var cert = RSA.Create(2048);
-        var rsaCertificateKey = new RsaSecurityKey(cert);
-        var publicKeyPem = cert.ExportRSAPublicKeyPem();
+        var rsaCertificateKey = new RsaSecurityKey(_rsa2048);
+        var publicKeyPem = _rsa2048.ExportRSAPublicKeyPem();
 
         var httpClient = new HttpClient();
 

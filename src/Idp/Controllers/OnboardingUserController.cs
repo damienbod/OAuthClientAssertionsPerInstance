@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Idp.Controllers;
@@ -18,8 +19,13 @@ public class OnboardingUserController : Controller
     /// Session exists in cache, get from cache and create
     /// </summary>
     [HttpPost("StartEmailVerification")]
-    public IActionResult StartEmailVerification(string sessionId, string email)
+    public async Task<IActionResult> StartEmailVerification(string sessionId, string email)
     {
+        // TODO
+        // AT must be verified and links to the sessionId
+        // Probably re-use the cnf claim which needs to be signed then with the mobile public key and not a new one everything
+        // better would be a cliam added to the AT when creating the AT
+        var at = await HttpContext.GetTokenAsync("access_token");
         _onboardingUserService.ProcessSessionAndEmail(sessionId, email);
 
         // TODO
