@@ -17,6 +17,7 @@ internal static class HostingExtensions
         JsonWebTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
         builder.Services.AddTransient<PublicKeyService>();
+        builder.Services.AddScoped<OnboardingUserService>();
 
         builder.Services.AddRazorPages();
 

@@ -7,11 +7,11 @@ namespace Idp.Controllers;
 [Route("api/[controller]")]
 public class OnboardingUserController : Controller
 {
-    private readonly PublicKeyService _publicKeyService;
+    private readonly OnboardingUserService _onboardingUserService;
 
-    public OnboardingUserController(PublicKeyService publicKeyService)
+    public OnboardingUserController(OnboardingUserService onboardingUserService)
     {
-        _publicKeyService = publicKeyService;
+        _onboardingUserService = onboardingUserService;
     }
 
     /// <summary>
@@ -20,12 +20,10 @@ public class OnboardingUserController : Controller
     [HttpPost("StartEmailVerification")]
     public IActionResult StartEmailVerification(string sessionId, string email)
     {
-        var publicKey = _publicKeyService.GetPublicKey(sessionId);
+        _onboardingUserService.ProcessSessionAndEmail(sessionId, email);
 
         // TODO
-        // Add publicKey, sessionId to DB
         // Send email verification email
-
         // User MUST click link in email on phone
         // This connects the email to the mobile session
 
@@ -38,10 +36,9 @@ public class OnboardingUserController : Controller
     [HttpPost("StartSmsVerification")]
     public IActionResult StartSmsVerification(string sessionId, string phoneNumber)
     {
-        var publicKey = _publicKeyService.GetPublicKey(sessionId);
-
+        _onboardingUserService.ProcessSessionAndPhoneNumber(sessionId, phoneNumber);
+        
         // TODO
-        // Update DB
         // Send SMS verification
 
         return NoContent();
@@ -53,11 +50,7 @@ public class OnboardingUserController : Controller
     [HttpPost("VerifyPhoneNumberWithSmsCode")]
     public IActionResult VerifyPhoneNumberWithSmsCode(string sessionId, string code)
     {
-        var publicKey = _publicKeyService.GetPublicKey(sessionId);
-
-        // TODO
-        // Update DB
-        // Send SMS verification
+        _onboardingUserService.VerifyPhoneNumberWithSmsCode(sessionId, code);
 
         return NoContent();
     }
