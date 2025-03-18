@@ -15,7 +15,8 @@ public static class Config
     public static IEnumerable<ApiScope> ApiScopes =>
         [
             new ApiScope("DPoPApiDefaultScope"),
-            new ApiScope("OnboardingUserScope")
+            new ApiScope("OnboardingUserScope"),
+            new ApiScope("sessionId")
         ];
 
     public static IEnumerable<Client> Clients(IWebHostEnvironment environment)
@@ -42,7 +43,7 @@ public static class Config
                     }
                 ],
 
-                AllowedScopes = { "DPoPApiDefaultScope" }
+                AllowedScopes = { "DPoPApiDefaultScope", "sessionId" }
             },
             new Client
             {
@@ -61,7 +62,7 @@ public static class Config
                     }
                 ],
 
-                AllowedScopes = { "OnboardingUserScope" }
+                AllowedScopes = { "OnboardingUserScope", "sessionId" }
             }
         ];
     }

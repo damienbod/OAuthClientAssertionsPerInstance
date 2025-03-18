@@ -34,10 +34,13 @@ public class Program
                 services.AddDistributedMemoryCache();
 
                 var rsa2048 = RSA.Create(2048);
-                services.AddSingleton<KeySessionService>(t => new KeySessionService(rsa2048));
+                var keySessionService = new KeySessionService(rsa2048);
+                var session = keySessionService.CreateGetSessionAsync().GetAwaiter().GetResult();
 
+                services.AddSingleton<KeySessionService>(t => keySessionService);
                 services.AddScoped<IClientAssertionService, ClientAssertionService>();
                 // https://docs.duendesoftware.com/foss/accesstokenmanagement/advanced/client_assertions/
+
 
                 services.AddClientCredentialsTokenManagement()
                     .AddClient("mobile-dpop-client", client =>
@@ -48,7 +51,7 @@ public class Program
                         // Using client assertion
                         //client.ClientSecret = "905e4892-7610-44cb-a122-6209b38c882f";
 
-                        client.Scope = "DPoPApiDefaultScope";
+                        client.Scope = $"DPoPApiDefaultScope sessionId:{session.SessionId}";
                         client.DPoPJsonWebKey = CreateDPoPKey(rsa2048);
                     })
                     .AddClient("onboarding-user-client", client =>
@@ -59,7 +62,7 @@ public class Program
                         // Using client assertion
                         //client.ClientSecret = "905e4892-7610-44cb-a122-6209b38c882f";
 
-                        client.Scope = "OnboardingUserScope";
+                        client.Scope = $"OnboardingUserScope sessionId:{session.SessionId}";
                         client.DPoPJsonWebKey = CreateDPoPKey(rsa2048);
                     });
 
