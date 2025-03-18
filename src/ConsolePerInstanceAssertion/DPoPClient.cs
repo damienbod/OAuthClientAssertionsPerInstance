@@ -4,6 +4,7 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,13 +31,26 @@ public class DPoPClient : BackgroundService
             Console.WriteLine("\n\n");
             _logger.LogInformation("DPoPClient running at: {time}", DateTimeOffset.UtcNow);
 
+
+            // Onobarding API
+            var onboardingClient = _clientFactory.CreateClient("OnboardingUserClient");
+            var formData = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("sessionId", "teste3e")
+            };
+            var content = new FormUrlEncodedContent(formData);
+            var onboardingClientResponse = await onboardingClient.PostAsync("api/OnboardingUser/StartEmailVerification", content, stoppingToken);
+
+
+
+            // Call mobile API
             var client = _clientFactory.CreateClient("DPoPApiDefaultClient");
             var response = await client.GetAsync("api/values", stoppingToken);
 
             if (response.IsSuccessStatusCode)
             {
-                var content = await response.Content.ReadAsStringAsync(stoppingToken);
-                _logger.LogInformation("API response: {response}", content);
+                var responseContent = await response.Content.ReadAsStringAsync(stoppingToken);
+                _logger.LogInformation("API response: {response}", responseContent);
             }
             else
             {

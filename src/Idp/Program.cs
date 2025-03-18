@@ -13,7 +13,7 @@ try
 
     builder.Host.UseSerilog((ctx, lc) => lc
         .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
-        .WriteTo.File("../../LogFiles/_logs-IdpPreInstanceAssertion.txt")
+        .WriteTo.File("../../LogFiles/_logs-Idp.txt")
         .Enrich.FromLogContext()
         .ReadFrom.Configuration(ctx.Configuration));
 
