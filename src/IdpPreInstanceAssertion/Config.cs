@@ -14,7 +14,7 @@ public static class Config
 
     public static IEnumerable<ApiScope> ApiScopes =>
         [
-            new ApiScope("scope-dpop"),
+            new ApiScope("DPoPApiDefaultScope"),
             new ApiScope("mobile")
         ];
 
@@ -25,24 +25,6 @@ public static class Config
 
         return
         [
-            new Client
-            {
-                ClientId = "mobile-client",
-                ClientName = "Mobile client",
-
-                AllowedGrantTypes = GrantTypes.ClientCredentials,
-                ClientSecrets =
-                [
-                    new Secret
-                    {
-                        // X509 cert base64-encoded
-                        Type = IdentityServerConstants.SecretTypes.X509CertificateBase64,
-                        Value = Convert.ToBase64String(rsaCertificate.GetRawCertData())
-                    }
-                ],
-
-                AllowedScopes = { "mobile" }
-            },
             new Client
             {
                 ClientId = "mobile-dpop-client",
@@ -60,7 +42,7 @@ public static class Config
                     }
                 ],
 
-                AllowedScopes = { "scope-dpop" }
+                AllowedScopes = { "DPoPApiDefaultScope" }
             }
         ];
     }
