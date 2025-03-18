@@ -27,24 +27,6 @@ public static class Config
         [
             new Client
             {
-                ClientId = "mobile-client",
-                ClientName = "Mobile client",
-
-                AllowedGrantTypes = GrantTypes.ClientCredentials,
-                ClientSecrets =
-                [
-                    new Secret
-                    {
-                        // X509 cert base64-encoded
-                        Type = IdentityServerConstants.SecretTypes.X509CertificateBase64,
-                        Value = Convert.ToBase64String(rsaCertificate.GetRawCertData())
-                    }
-                ],
-
-                AllowedScopes = { "mobile" }
-            },
-            new Client
-            {
                 ClientId = "mobile-dpop-client",
                 ClientName = "Mobile dpop client",
                 RequireDPoP = true,
