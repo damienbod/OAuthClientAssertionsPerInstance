@@ -70,7 +70,7 @@ internal static class HostingExtensions
         services.AddAuthorizationBuilder()
             .AddPolicy("protectedScope", policy =>
             {
-                policy.RequireClaim("scope", "scope-dpop");
+                policy.RequireClaim("scope", "DPoPApiDefaultScope");
             });
 
         services.AddSwaggerGen(c =>

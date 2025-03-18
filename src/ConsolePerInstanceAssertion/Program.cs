@@ -46,7 +46,7 @@ public class Program
                         // Using client assertion
                         //client.ClientSecret = "905e4892-7610-44cb-a122-6209b38c882f";
 
-                        client.Scope = "scope-dpop";
+                        client.Scope = "DPoPApiDefaultScope";
                         client.DPoPJsonWebKey = CreateDPoPKey();
                     });
 

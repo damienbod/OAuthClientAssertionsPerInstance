@@ -14,7 +14,7 @@ public static class Config
 
     public static IEnumerable<ApiScope> ApiScopes =>
         [
-            new ApiScope("scope-dpop"),
+            new ApiScope("DPoPApiDefaultScope"),
             new ApiScope("mobile")
         ];
 
@@ -60,7 +60,7 @@ public static class Config
                     }
                 ],
 
-                AllowedScopes = { "scope-dpop" }
+                AllowedScopes = { "DPoPApiDefaultScope" }
             }
         ];
     }
