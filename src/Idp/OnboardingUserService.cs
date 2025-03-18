@@ -8,7 +8,7 @@ public class OnboardingUserService
     {
         _publicKeyService = publicKeyService;
     }
- 
+
     /// <summary>
     /// Get public key from cache
     /// </summary>

@@ -37,7 +37,7 @@ public class OnboardingUserController : Controller
     public IActionResult StartSmsVerification(string sessionId, string phoneNumber)
     {
         _onboardingUserService.ProcessSessionAndPhoneNumber(sessionId, phoneNumber);
-        
+
         // TODO
         // Send SMS verification
 

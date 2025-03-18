@@ -1,5 +1,4 @@
-﻿using Duende.IdentityServer;
-using Duende.IdentityServer.Configuration;
+﻿using Duende.IdentityServer.Configuration;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Validation;
@@ -56,7 +55,7 @@ public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
         var fail = new SecretValidationResult { Success = false };
         var success = new SecretValidationResult { Success = true };
 
-        if (parsedSecret.Type != IdentityServerConstants.ParsedSecretTypes.JwtBearer)
+        if (parsedSecret.Type != ParsedSecretTypes.JwtBearer)
         {
             return fail;
         }
