@@ -18,13 +18,46 @@ public class OnboardingUserController : Controller
     /// Session exists in cache, get from cache and create
     /// </summary>
     [HttpPost("StartEmailVerification")]
-    public IActionResult StartEmailVerification(string sessionId)
+    public IActionResult StartEmailVerification(string sessionId, string email)
     {
         var publicKey = _publicKeyService.GetPublicKey(sessionId);
 
         // TODO
         // Add publicKey, sessionId to DB
         // Send email verification email
+
+        // User MUST click link in email on phone
+        // This connects the email to the mobile session
+
+        return NoContent();
+    }
+
+    /// <summary>
+    /// Session exists in DB, email is verified, now verify phone number
+    /// </summary>
+    [HttpPost("StartSmsVerification")]
+    public IActionResult StartSmsVerification(string sessionId, string phoneNumber)
+    {
+        var publicKey = _publicKeyService.GetPublicKey(sessionId);
+
+        // TODO
+        // Update DB
+        // Send SMS verification
+
+        return NoContent();
+    }
+
+    /// <summary>
+    /// Session exists in DB, email is verified, now verify phone number
+    /// </summary>
+    [HttpPost("VerifyPhoneNumberWithSmsCode")]
+    public IActionResult VerifyPhoneNumberWithSmsCode(string sessionId, string code)
+    {
+        var publicKey = _publicKeyService.GetPublicKey(sessionId);
+
+        // TODO
+        // Update DB
+        // Send SMS verification
 
         return NoContent();
     }
