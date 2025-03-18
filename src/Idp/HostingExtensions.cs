@@ -1,3 +1,4 @@
+using Duende.AspNetCore.Authentication.JwtBearer.DPoP;
 using Duende.IdentityServer.Validation;
 using Idp.Data;
 using Idp.Models;
@@ -46,6 +47,38 @@ internal static class HostingExtensions
         idsvrBuilder.AddSecretParser<JwtBearerClientAssertionSecretParser>();
         idsvrBuilder.AddSecretValidator<PerInstancePrivateKeyJwtSecretValidator>();
 
+        var stsServer = builder.Configuration["StsServer"];
+
+        builder.Services.AddAuthentication()
+            .AddJwtBearer("onboardinguser", options =>
+            {
+                options.Authority = stsServer;
+                options.TokenValidationParameters.ValidateAudience = false;
+                options.MapInboundClaims = false;
+
+                options.TokenValidationParameters.ValidTypes = ["at+jwt"];
+            });
+
+        // layers DPoP onto the "token" scheme above
+        builder.Services.ConfigureDPoPTokensForScheme("onboardinguser", opt =>
+        {
+            // Chose a validation mode: either Nonce or IssuedAt. With nonce validation,
+            // the api supplies a nonce that must be used to prove that the token was
+            // not pre-generated. With IssuedAt validation, the client includes the
+            // current time in the proof token, which is compared to the clock. Nonce
+            // validation provides protection against some attacks that are possible
+            // with IssuedAt validation, at the cost of an additional HTTP request being
+            // required each time the API is invoked.
+            //
+            // See RFC 9449 for more details.
+            opt.ValidationMode = ExpirationValidationMode.IssuedAt; // IssuedAt is the default.
+        });
+
+        builder.Services.AddAuthorizationBuilder()
+            .AddPolicy("onboardinguserpolicy", policy =>
+            {
+                policy.RequireClaim("scope", "DPoPApiDefaultScope");
+            });
         builder.Services.AddControllers();
 
         return builder.Build();

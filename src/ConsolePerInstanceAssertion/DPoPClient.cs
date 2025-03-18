@@ -30,7 +30,7 @@ public class DPoPClient : BackgroundService
             Console.WriteLine("\n\n");
             _logger.LogInformation("DPoPClient running at: {time}", DateTimeOffset.UtcNow);
 
-            var client = _clientFactory.CreateClient("mobile-dpop-client");
+            var client = _clientFactory.CreateClient("DPoPApiDefaultClient");
             var response = await client.GetAsync("api/values", stoppingToken);
 
             if (response.IsSuccessStatusCode)

@@ -38,7 +38,7 @@ public class Program
                 // https://docs.duendesoftware.com/foss/accesstokenmanagement/advanced/client_assertions/
 
                 services.AddClientCredentialsTokenManagement()
-                    .AddClient("mobile-dpop-client", client =>
+                    .AddClient("DPoPApiDefaultClient", client =>
                     {
                         client.TokenEndpoint = "https://localhost:5101/connect/token";
 
@@ -50,7 +50,7 @@ public class Program
                         client.DPoPJsonWebKey = CreateDPoPKey();
                     });
 
-                services.AddClientCredentialsHttpClient("mobile-dpop-client", "mobile-dpop-client", client =>
+                services.AddClientCredentialsHttpClient("DPoPApiDefaultClient", "mobile-dpop-client", client =>
                 {
                     client.BaseAddress = new Uri("https://localhost:5105/");
                 });

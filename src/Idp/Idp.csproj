@@ -8,6 +8,7 @@
 	<ItemGroup>
 		<PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="7.1.1" />
 		<PackageReference Include="Duende.IdentityServer.Configuration.EntityFramework" Version="7.1.1" />
+    <PackageReference Include="Duende.AspNetCore.Authentication.JwtBearer" Version="0.1.3" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.3" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="9.0.3" />
 		<PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
