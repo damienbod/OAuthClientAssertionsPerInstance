@@ -15,11 +15,13 @@ public class DPoPClient : BackgroundService
 {
     private readonly ILogger<DPoPClient> _logger;
     private readonly IHttpClientFactory _clientFactory;
+    private readonly KeySessionService _keySessionService;
 
-    public DPoPClient(ILogger<DPoPClient> logger, IHttpClientFactory factory)
+    public DPoPClient(ILogger<DPoPClient> logger, IHttpClientFactory factory, KeySessionService keySessionService)
     {
         _logger = logger;
         _clientFactory = factory;
+        _keySessionService = keySessionService;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -31,12 +33,13 @@ public class DPoPClient : BackgroundService
             Console.WriteLine("\n\n");
             _logger.LogInformation("DPoPClient running at: {time}", DateTimeOffset.UtcNow);
 
+            var session = await _keySessionService.CreateGetSessionAsync();
 
             // Onobarding User API
             var onboardingClient = _clientFactory.CreateClient("onboarding-user-client");
             var formData = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>("sessionId", "teste3e")
+                new KeyValuePair<string, string>("sessionId", session.SessionId!)
             };
             var content = new FormUrlEncodedContent(formData);
             var onboardingClientResponse = await onboardingClient.PostAsync("api/OnboardingUser/StartEmailVerification", content, stoppingToken);
