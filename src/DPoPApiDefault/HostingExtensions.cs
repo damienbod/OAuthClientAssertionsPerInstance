@@ -1,14 +1,10 @@
 using Duende.AspNetCore.Authentication.JwtBearer.DPoP;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using NetEscapades.AspNetCore.SecurityHeaders.Infrastructure;
 using Serilog;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
 
 namespace DPoPApiDefault;
 
@@ -52,7 +48,7 @@ internal static class HostingExtensions
                 options.Authority = stsServer;
                 // TODO add valid aud
                 options.TokenValidationParameters.ValidateAudience = false;
-                options.MapInboundClaims = false; 
+                options.MapInboundClaims = false;
 
                 options.TokenValidationParameters.ValidTypes = ["at+jwt"];
             });

@@ -199,7 +199,7 @@ public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
         var form = httpContext.Request.Form.FirstOrDefault(c => c.Key == "scope");
         var scopes = form.Value.ToString().Split(" ");
         var scope = scopes.FirstOrDefault(s => s.StartsWith("sessionId"));
-        if(scope != null)
+        if (scope != null)
         {
             var sessionId = scope.Replace("sessionId:", "");
             return sessionId;
