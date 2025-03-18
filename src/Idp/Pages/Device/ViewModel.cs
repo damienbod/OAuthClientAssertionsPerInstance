@@ -1,4 +1,4 @@
-namespace IdpPreInstanceAssertion.Pages.Device;
+namespace Idp.Pages.Device;
 
 public class ViewModel
 {

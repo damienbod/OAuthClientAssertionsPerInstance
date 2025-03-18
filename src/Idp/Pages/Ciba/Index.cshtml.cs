@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace IdpPreInstanceAssertion.Pages.Ciba;
+namespace Idp.Pages.Ciba;
 
 [AllowAnonymous]
 [SecurityHeaders]

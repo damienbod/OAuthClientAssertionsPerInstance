@@ -2,7 +2,7 @@ using Duende.IdentityModel;
 using Duende.IdentityServer;
 using Duende.IdentityServer.Events;
 using Duende.IdentityServer.Services;
-using IdpPreInstanceAssertion.Models;
+using Idp.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
 
-namespace IdpPreInstanceAssertion.Pages.ExternalLogin;
+namespace Idp.Pages.ExternalLogin;
 
 [AllowAnonymous]
 [SecurityHeaders]

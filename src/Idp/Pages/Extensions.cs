@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace IdpPreInstanceAssertion.Pages;
+namespace Idp.Pages;
 
 public static class Extensions
 {

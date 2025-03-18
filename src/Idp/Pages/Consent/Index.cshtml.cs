@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace IdpPreInstanceAssertion.Pages.Consent;
+namespace Idp.Pages.Consent;
 
 [Authorize]
 [SecurityHeadersAttribute]

@@ -1,4 +1,4 @@
-namespace IdpPreInstanceAssertion.Pages.Login;
+namespace Idp.Pages.Login;
 
 public class LoginOptions
 {

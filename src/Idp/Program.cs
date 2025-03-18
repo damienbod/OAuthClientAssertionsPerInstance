@@ -1,4 +1,4 @@
-﻿using IdpPreInstanceAssertion;
+﻿using Idp;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()

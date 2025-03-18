@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace IdpPreInstanceAssertion.Controllers;
+namespace Idp.Controllers;
 
 [AllowAnonymous]
 [Route("api/[controller]")]

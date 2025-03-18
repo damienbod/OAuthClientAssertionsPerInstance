@@ -8,7 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using static Duende.IdentityServer.IdentityServerConstants;
 
-namespace IdpPreInstanceAssertion;
+namespace Idp;
 
 public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
 {

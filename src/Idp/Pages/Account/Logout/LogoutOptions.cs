@@ -1,5 +1,5 @@
 
-namespace IdpPreInstanceAssertion.Pages.Logout;
+namespace Idp.Pages.Logout;
 
 public class LogoutOptions
 {

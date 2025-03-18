@@ -4,7 +4,7 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace IdpPreInstanceAssertion.Pages.Login;
+namespace Idp.Pages.Login;
 
 public class InputModel
 {

@@ -2,7 +2,7 @@
 // See LICENSE in the project root for license information.
 
 
-namespace IdpPreInstanceAssertion.Pages.Device;
+namespace Idp.Pages.Device;
 
 public class DeviceOptions
 {

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace IdpPreInstanceAssertion.Pages.Account;
+namespace Idp.Pages.Account;
 
 public class AccessDeniedModel : PageModel
 {

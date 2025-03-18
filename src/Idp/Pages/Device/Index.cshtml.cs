@@ -4,13 +4,13 @@ using Duende.IdentityServer.Extensions;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Validation;
-using IdpPreInstanceAssertion.Pages.Consent;
+using Idp.Pages.Consent;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Options;
 
-namespace IdpPreInstanceAssertion.Pages.Device;
+namespace Idp.Pages.Device;
 
 [SecurityHeaders]
 [Authorize]

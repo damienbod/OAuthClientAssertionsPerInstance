@@ -2,7 +2,7 @@ using Duende.IdentityServer.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace IdpPreInstanceAssertion.Pages.Error;
+namespace Idp.Pages.Error;
 
 [AllowAnonymous]
 [SecurityHeaders]

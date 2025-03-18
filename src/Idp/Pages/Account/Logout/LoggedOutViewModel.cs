@@ -3,7 +3,7 @@
 // See LICENSE in the project root for license information.
 
 
-namespace IdpPreInstanceAssertion.Pages.Logout;
+namespace Idp.Pages.Logout;
 
 public class LoggedOutViewModel
 {
