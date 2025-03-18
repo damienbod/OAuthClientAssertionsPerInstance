@@ -53,6 +53,7 @@ internal static class HostingExtensions
             .AddJwtBearer("onboardinguser", options =>
             {
                 options.Authority = stsServer;
+                // TODO add valid aud
                 options.TokenValidationParameters.ValidateAudience = false;
                 options.MapInboundClaims = false;
 

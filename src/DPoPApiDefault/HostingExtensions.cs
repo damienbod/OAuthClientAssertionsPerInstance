@@ -46,6 +46,7 @@ internal static class HostingExtensions
             .AddJwtBearer("dpoptokenscheme", options =>
             {
                 options.Authority = stsServer;
+                // TODO add valid aud
                 options.TokenValidationParameters.ValidateAudience = false;
                 options.MapInboundClaims = false;
 
