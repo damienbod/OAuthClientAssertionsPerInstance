@@ -39,7 +39,7 @@ public class DPoPClient : BackgroundService
             var onboardingClient = _clientFactory.CreateClient("onboarding-user-client");
             var formData = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>("sessionId", session.SessionId!)
+                new KeyValuePair<string, string>("email", "your.email@email.ch")
             };
             var content = new FormUrlEncodedContent(formData);
             var onboardingClientResponse = await onboardingClient.PostAsync("api/OnboardingUser/StartEmailVerification", content, stoppingToken);

@@ -33,8 +33,7 @@ public class Program
             {
                 services.AddDistributedMemoryCache();
 
-                var rsa2048 = RSA.Create(2048);
-                var keySessionService = new KeySessionService(rsa2048);
+                var keySessionService = new KeySessionService();
                 var session = keySessionService.CreateGetSessionAsync().GetAwaiter().GetResult();
 
                 services.AddSingleton<KeySessionService>(t => keySessionService);
@@ -52,7 +51,7 @@ public class Program
                         //client.ClientSecret = "905e4892-7610-44cb-a122-6209b38c882f";
 
                         client.Scope = $"DPoPApiDefaultScope sessionId:{session.SessionId}";
-                        client.DPoPJsonWebKey = CreateDPoPKey(rsa2048);
+                        client.DPoPJsonWebKey = CreateDPoPKey();
                     })
                     .AddClient("onboarding-user-client", client =>
                     {
@@ -63,7 +62,7 @@ public class Program
                         //client.ClientSecret = "905e4892-7610-44cb-a122-6209b38c882f";
 
                         client.Scope = $"OnboardingUserScope sessionId:{session.SessionId}";
-                        client.DPoPJsonWebKey = CreateDPoPKey(rsa2048);
+                        client.DPoPJsonWebKey = CreateDPoPKey();
                     });
 
                 services.AddClientCredentialsHttpClient("mobile-dpop-client", "mobile-dpop-client", client =>
@@ -81,9 +80,9 @@ public class Program
         return host;
     }
 
-    private static string CreateDPoPKey(RSA rsa2048)
+    private static string CreateDPoPKey()
     {
-        var key = new RsaSecurityKey(rsa2048);
+        var key = new RsaSecurityKey(RSA.Create(2048));
         var jwk = JsonWebKeyConverter.ConvertFromRSASecurityKey(key);
         jwk.Alg = "PS256";
         var jwkJson = JsonSerializer.Serialize(jwk);
