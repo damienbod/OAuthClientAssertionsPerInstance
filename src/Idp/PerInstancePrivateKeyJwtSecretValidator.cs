@@ -68,7 +68,7 @@ public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
         }
 
         List<SecurityKey> trustedKeys;
-        if ("mobile-dpop-client" == parsedSecret.Id)
+        if ("mobile-dpop-client" == parsedSecret.Id || "onboarding-user-client" == parsedSecret.Id)
         {
             // client assertion using instance public key
             var sessionId = GetSessionId(jwtTokenString);

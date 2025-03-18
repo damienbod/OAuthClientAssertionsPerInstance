@@ -25,7 +25,7 @@ public class ClientAssertionService : IClientAssertionService
     public async Task<ClientAssertion?> GetClientAssertionAsync(
       string? clientName = null, TokenRequestParameters? parameters = null)
     {
-        if (clientName == "mobile-dpop-client")
+        if ((clientName == "mobile-dpop-client") || (clientName == "onboarding-user-client"))
         {
             var key = await _keySessionService.CreateGetSessionAsync();
             var options = _options.Get(clientName);

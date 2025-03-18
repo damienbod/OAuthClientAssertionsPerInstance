@@ -77,7 +77,7 @@ internal static class HostingExtensions
         builder.Services.AddAuthorizationBuilder()
             .AddPolicy("onboardinguserpolicy", policy =>
             {
-                policy.RequireClaim("scope", "DPoPApiDefaultScope");
+                policy.RequireClaim("scope", "OnboardingUserScope");
             });
         builder.Services.AddControllers();
 

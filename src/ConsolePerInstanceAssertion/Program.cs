@@ -48,11 +48,26 @@ public class Program
 
                         client.Scope = "DPoPApiDefaultScope";
                         client.DPoPJsonWebKey = CreateDPoPKey();
+                    })
+                    .AddClient("OnboardingUserClient", client =>
+                    {
+                        client.TokenEndpoint = "https://localhost:5101/connect/token";
+
+                        client.ClientId = "onboarding-user-client";
+                        // Using client assertion
+                        //client.ClientSecret = "905e4892-7610-44cb-a122-6209b38c882f";
+
+                        client.Scope = "OnboardingUserScope";
+                        client.DPoPJsonWebKey = CreateDPoPKey();
                     });
 
                 services.AddClientCredentialsHttpClient("DPoPApiDefaultClient", "mobile-dpop-client", client =>
                 {
                     client.BaseAddress = new Uri("https://localhost:5105/");
+                });
+                services.AddClientCredentialsHttpClient("OnboardingUserClient", "onboarding-user-client", client =>
+                {
+                    client.BaseAddress = new Uri("https://localhost:5101/");
                 });
 
                 services.AddHostedService<DPoPClient>();

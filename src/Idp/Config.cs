@@ -15,7 +15,7 @@ public static class Config
     public static IEnumerable<ApiScope> ApiScopes =>
         [
             new ApiScope("DPoPApiDefaultScope"),
-            new ApiScope("mobile")
+            new ApiScope("OnboardingUserScope")
         ];
 
     public static IEnumerable<Client> Clients(IWebHostEnvironment environment)
@@ -43,6 +43,25 @@ public static class Config
                 ],
 
                 AllowedScopes = { "DPoPApiDefaultScope" }
+            },
+            new Client
+            {
+                ClientId = "onboarding-user-client",
+                ClientName = "Onboarding User Client",
+                RequireDPoP = true,
+
+                AllowedGrantTypes = GrantTypes.ClientCredentials,
+                ClientSecrets =
+                [
+                    new Secret
+                    {
+                        // X509 cert base64-encoded
+                        Type = IdentityServerConstants.SecretTypes.X509CertificateBase64,
+                        Value = Convert.ToBase64String(rsaCertificate.GetRawCertData())
+                    }
+                ],
+
+                AllowedScopes = { "OnboardingUserScope" }
             }
         ];
     }
