@@ -23,12 +23,16 @@ public class OnboardingController : Controller
     [HttpPost]
     public string CreateSession(string publicKey)
     {
+        // TODO
         // validation and DDoS protection required...
+        // Maybe as secret to authenticate, prevent simple bots
 
+        // TODO
         // Encypt sessionId using publickey
-        // Use PKCE
+        // Use PKCE with email as second step
         // Add nonce and state parameters as in code flow
         // send request in body
+        // return signed JWT with payload
         return _publicKeyService.CreateSession(publicKey);
     }
 }
