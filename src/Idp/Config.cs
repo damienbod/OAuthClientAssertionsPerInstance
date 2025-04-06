@@ -35,6 +35,7 @@ public static class Config
                 AllowedGrantTypes = GrantTypes.ClientCredentials,
                 ClientSecrets =
                 [
+                    // default secret, not used, but IDP requires this to setup the configuration
                     new Secret
                     {
                         // X509 cert base64-encoded
@@ -54,6 +55,7 @@ public static class Config
                 AllowedGrantTypes = GrantTypes.ClientCredentials,
                 ClientSecrets =
                 [
+                    // default secret, not used, but IDP requires this to setup the configuration
                     new Secret
                     {
                         // X509 cert base64-encoded
