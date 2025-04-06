@@ -75,6 +75,7 @@ public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
             var securityKey = _publicKeyService.GetPublicSecurityKey(sessionIdFromAssertion);
             trustedKeys = [securityKey];
 
+            // sessionid in the scope MUST match the sessionid in the client assertion to prevent session hijacking.
             var scopeSessionId = GetSessionIdFromRequestedScope(_httpContextAccessor.HttpContext);
             if (!sessionIdFromAssertion.Equals(scopeSessionId))
             {
