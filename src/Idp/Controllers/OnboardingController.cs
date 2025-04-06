@@ -25,6 +25,10 @@ public class OnboardingController : Controller
     {
         // validation and DDoS protection required...
 
+        // Encypt sessionId using publickey
+        // Use PKCE
+        // Add nonce and state parameters as in code flow
+        // send request in body
         return _publicKeyService.CreateSession(publicKey);
     }
 }
