@@ -53,7 +53,7 @@ Figure: First-Party Client Authorization Device Request
 - (H) ..
 
 
- Device Registration Request
+Device Registration Request
 
   POST /token HTTP/1.1
     Host: as.example.com
@@ -95,6 +95,8 @@ Device Registration Response
       "nonce": "<nonce>"
     }
 
+Client Credentials token request using client assertion
+
 Token Endpoint Successful Response
 
    This specification extends the OAuth 2.0 [RFC6749] token response
@@ -135,3 +137,12 @@ Example of Access Token using DPoP
       "client_id": "onboarding-user-client",
       "jti": "7651BD4201E947DA4220A01D7207F44E"
     }
+
+Authorization Challenge Request
+
+  POST /token HTTP/1.1
+    Host: as.example.com
+    Authorization: DPoP "access_token"
+    ...
+    &email=<email_address>
+    &code_verifier=<code_verifier>
