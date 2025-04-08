@@ -101,7 +101,7 @@ Example of FP Token
 }
 ~~~
 
-## Client Credentials token request using client assertion
+## Token Endpoint Client Credentials token request using client assertion Request
 
 ~~~
 {
@@ -115,8 +115,6 @@ Example of FP Token
   "nbf": 1744142346
 }
 ~~~
-
-## Token Endpoint Client Assertion request
 
 ## Token Endpoint Successful Response
 
