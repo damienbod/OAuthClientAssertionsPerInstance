@@ -12,30 +12,30 @@ public class OnboardingUserService
     /// <summary>
     /// Get public key from cache
     /// </summary>
-    private string GetPublicKey(string sessionId)
+    private string GetPublicKey(string authSession)
     {
-        return _publicKeyService.GetPublicKey(sessionId);
+        return _publicKeyService.GetPublicKey(authSession);
 
-        throw new ArgumentNullException(nameof(sessionId), "something went wrong");
+        throw new ArgumentNullException(nameof(authSession), "something went wrong");
     }
 
-    public void ProcessSessionAndEmail(string sessionId, string email)
+    public void ProcessAuthSessionAndEmail(string authSession, string email)
     {
-        var publicKey = GetPublicKey(sessionId);
+        var publicKey = GetPublicKey(authSession);
 
         // TODO
-        // Add or Update publicKey, sessionId to DB
+        // Add or Update publicKey, auth_session to DB
     }
 
-    internal void ProcessSessionAndPhoneNumber(string sessionId, string phoneNumber)
+    internal void ProcessAuthSessionAndPhoneNumber(string authSession, string phoneNumber)
     {
-        var publicKey = GetPublicKey(sessionId);
+        var publicKey = GetPublicKey(authSession);
 
         // TODO
         // Update DB
     }
 
-    internal void VerifyPhoneNumberWithSmsCode(string sessionId, string code)
+    internal void VerifyPhoneNumberWithSmsCode(string authSession, string code)
     {
         // TODO
         // Update DB

@@ -28,7 +28,7 @@ public class OnboardingController : Controller
         // Maybe as secret to authenticate, prevent simple bots
 
         // TODO
-        // Encypt sessionId using publickey
+        // Encypt auth_session using publickey
         // Use PKCE with email as second step
         // Add nonce and state parameters as in code flow
         // send request in body

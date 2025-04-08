@@ -71,15 +71,15 @@ public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
         if ("mobile-dpop-client" == parsedSecret.Id || "onboarding-user-client" == parsedSecret.Id)
         {
             // client assertion using instance public key
-            var sessionIdFromAssertion = GetSessionIdFromClientAssertion(jwtTokenString);
-            var securityKey = _publicKeyService.GetPublicSecurityKey(sessionIdFromAssertion);
+            var authSessionFromAssertion = GetAuthSessionFromClientAssertion(jwtTokenString);
+            var securityKey = _publicKeyService.GetPublicSecurityKey(authSessionFromAssertion);
             trustedKeys = [securityKey];
 
-            // sessionid in the scope MUST match the sessionid in the client assertion to prevent session hijacking.
-            var scopeSessionId = GetSessionIdFromRequestedScope(_httpContextAccessor.HttpContext);
-            if (!sessionIdFromAssertion.Equals(scopeSessionId))
+            // auth_session in the scope MUST match the device_auth_session in the client assertion to prevent session hijacking.
+            var scopeAuthSession = GetAuthSessionRefFromRequestedScope(_httpContextAccessor.HttpContext);
+            if (!authSessionFromAssertion.Equals(scopeAuthSession))
             {
-                _logger.LogError("scope sessionId incorrect");
+                _logger.LogError("scope auth_session incorrect");
                 return fail;
             }
         }
@@ -195,32 +195,32 @@ public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
         return success;
     }
 
-    private string GetSessionIdFromRequestedScope(HttpContext httpContext)
+    private string GetAuthSessionRefFromRequestedScope(HttpContext httpContext)
     {
         var form = httpContext.Request.Form.FirstOrDefault(c => c.Key == "scope");
         var scopes = form.Value.ToString().Split(" ");
-        var scope = scopes.FirstOrDefault(s => s.StartsWith("sessionId"));
+        var scope = scopes.FirstOrDefault(s => s.StartsWith("auth_session"));
         if (scope != null)
         {
-            var sessionId = scope.Replace("sessionId:", "");
-            return sessionId;
+            var authSession = scope.Replace("auth_session:", "");
+            return authSession;
         }
 
         return string.Empty;
     }
 
-    private string GetSessionIdFromClientAssertion(string token)
+    private string GetAuthSessionFromClientAssertion(string token)
     {
         try
         {
             var jwt = new JwtSecurityToken(token);
-            var sessionIdClaim = jwt.Claims.FirstOrDefault(c => c.Type == "AppSessionId");
+            var deviceAuthSessionClaim = jwt.Claims.FirstOrDefault(c => c.Type == "device_auth_session");
 
-            return sessionIdClaim.Value.ToString();
+            return deviceAuthSessionClaim.Value.ToString();
         }
         catch (Exception e)
         {
-            _logger.LogWarning(e, "AppSessionId");
+            _logger.LogWarning(e, "device_auth_session");
             return null;
         }
     }

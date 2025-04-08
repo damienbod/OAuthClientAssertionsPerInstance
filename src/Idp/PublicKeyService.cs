@@ -9,35 +9,35 @@ public class PublicKeyService
 
     public string CreateSession(string publicKey)
     {
-        var sessionId = RandomNumberGenerator.GetHexString(32);
+        var authSession = RandomNumberGenerator.GetHexString(32);
 
         // Add to cache with 10 min lifespan
         // DDoS protection required
-        _inMemoryCache.Add(sessionId, publicKey);
+        _inMemoryCache.Add(authSession, publicKey);
 
-        return sessionId;
+        return authSession;
     }
 
     /// <summary>
     /// Get public key from cache
     /// </summary>
-    public string GetPublicKey(string sessionId)
+    public string GetPublicKey(string authSession)
     {
-        var data = _inMemoryCache.GetValueOrDefault(sessionId);
+        var data = _inMemoryCache.GetValueOrDefault(authSession);
         if (data != null)
         {
             return data;
         }
 
-        throw new ArgumentNullException(nameof(sessionId), "something went wrong");
+        throw new ArgumentNullException(nameof(authSession), "something went wrong");
     }
 
     /// <summary>
     /// Get public key from cache
     /// </summary>
-    public SecurityKey GetPublicSecurityKey(string sessionId)
+    public SecurityKey GetPublicSecurityKey(string authSession)
     {
-        var publicKeyPem = _inMemoryCache.GetValueOrDefault(sessionId);
+        var publicKeyPem = _inMemoryCache.GetValueOrDefault(authSession);
         if (publicKeyPem != null)
         {
             RsaSecurityKey securityKey;
@@ -48,6 +48,6 @@ public class PublicKeyService
             return securityKey;
         }
 
-        throw new ArgumentNullException(nameof(sessionId), "something went wrong");
+        throw new ArgumentNullException(nameof(authSession), "something went wrong");
     }
 }

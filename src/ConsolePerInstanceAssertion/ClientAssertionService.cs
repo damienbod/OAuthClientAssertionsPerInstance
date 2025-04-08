@@ -42,7 +42,7 @@ public class ClientAssertionService : IClientAssertionService
                     { JwtClaimTypes.JwtId, Guid.NewGuid().ToString() },
                     { JwtClaimTypes.Subject, options.ClientId! },
                     { JwtClaimTypes.IssuedAt, DateTime.UtcNow.ToEpochTime() },
-                    { "AppSessionId", key.SessionId! }
+                    { "device_auth_session", key.AuthSession! }
                 }
             };
 

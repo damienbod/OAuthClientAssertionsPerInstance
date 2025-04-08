@@ -20,9 +20,9 @@ public class OnboardingUserController : Controller
     [HttpPost("StartEmailVerification")]
     public IActionResult StartEmailVerification(string email)
     {
-        string sessionId = GetSessionId();
+        string authSession = GetAuthSession();
 
-        _onboardingUserService.ProcessSessionAndEmail(sessionId, email);
+        _onboardingUserService.ProcessAuthSessionAndEmail(authSession, email);
 
         // TODO
         // Send email verification email
@@ -38,8 +38,8 @@ public class OnboardingUserController : Controller
     [HttpPost("StartSmsVerification")]
     public IActionResult StartSmsVerification(string phoneNumber)
     {
-        var sessionId = GetSessionId();
-        _onboardingUserService.ProcessSessionAndPhoneNumber(sessionId, phoneNumber);
+        var authSession = GetAuthSession();
+        _onboardingUserService.ProcessAuthSessionAndPhoneNumber(authSession, phoneNumber);
 
         // TODO
         // Send SMS verification
@@ -53,16 +53,16 @@ public class OnboardingUserController : Controller
     [HttpPost("VerifyPhoneNumberWithSmsCode")]
     public IActionResult VerifyPhoneNumberWithSmsCode(string code)
     {
-        var sessionId = GetSessionId();
-        _onboardingUserService.VerifyPhoneNumberWithSmsCode(sessionId, code);
+        var authSession = GetAuthSession();
+        _onboardingUserService.VerifyPhoneNumberWithSmsCode(authSession, code);
 
         return NoContent();
     }
 
-    private string GetSessionId()
+    private string GetAuthSession()
     {
-        var sessionIdClaim = User.Claims.FirstOrDefault(c => c.Type == "scope" && c.Value.StartsWith("sessionId"));
-        var sessionId = sessionIdClaim.Value.Replace("sessionId:", "");
-        return sessionId;
+        var authSessionClaim = User.Claims.FirstOrDefault(c => c.Type == "scope" && c.Value.StartsWith("auth_session"));
+        var authSession = authSessionClaim.Value.Replace("auth_session:", "");
+        return authSession;
     }
 }

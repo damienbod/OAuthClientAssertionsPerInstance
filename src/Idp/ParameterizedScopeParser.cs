@@ -9,7 +9,7 @@ public class ParameterizedScopeParser : DefaultScopeParser
 
     public override void ParseScopeValue(ParseScopeContext scopeContext)
     {
-        const string transactionScopeName = "sessionId";
+        const string transactionScopeName = "auth_session";
         const string separator = ":";
         const string transactionScopePrefix = transactionScopeName + separator;
 
@@ -25,7 +25,7 @@ public class ParameterizedScopeParser : DefaultScopeParser
             }
             else
             {
-                scopeContext.SetError("sessionId scope missing transaction parameter value");
+                scopeContext.SetError("auth_session scope missing transaction parameter value");
             }
         }
         else if (scopeValue != transactionScopeName)

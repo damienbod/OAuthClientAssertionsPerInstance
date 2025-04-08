@@ -10,7 +10,7 @@ public class ValuesController : Controller
     [HttpGet]
     public IEnumerable<string> Get()
     {
-        var sessionId = GetSessionId();
+        var authSession = GetAuthSession();
         // debugging info
         var authHeader = Request.Headers.Authorization;
         var claims = User.Claims.Select(c => new { c.Type, c.Value });
@@ -18,14 +18,14 @@ public class ValuesController : Controller
         return
         [
             "data 1 from the api protected using OAuth DPoP",
-            $"data 2 from the api, sessionId from AT: {sessionId}"
+            $"data 2 from the api, auth_session from AT: {authSession}"
         ];
     }
 
-    private string? GetSessionId()
+    private string? GetAuthSession()
     {
-        var sessionIdClaim = User.Claims.FirstOrDefault(c => c.Type == "scope" && c.Value.StartsWith("sessionId"));
-        var sessionId = sessionIdClaim?.Value.Replace("sessionId:", "");
-        return sessionId;
+        var authSessionClaim = User.Claims.FirstOrDefault(c => c.Type == "scope" && c.Value.StartsWith("auth_session"));
+        var authSession = authSessionClaim?.Value.Replace("auth_session:", "");
+        return authSession;
     }
 }

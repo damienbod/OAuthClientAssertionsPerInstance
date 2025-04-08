@@ -17,11 +17,11 @@ public class KeySessionService
     /// <summary>
     /// One signing key per application instance
     /// </summary>
-    private static (string? SessionId, SigningCredentials? SigningCredentials) _inMemoryCache = (null, null);
+    private static (string? AuthSession, SigningCredentials? SigningCredentials) _inMemoryCache = (null, null);
 
-    public async Task<(string? SessionId, SigningCredentials? SigningCredentials)> CreateGetSessionAsync()
+    public async Task<(string? AuthSession, SigningCredentials? SigningCredentials)> CreateGetSessionAsync()
     {
-        if (_inMemoryCache.SessionId != null)
+        if (_inMemoryCache.AuthSession != null)
         {
             return _inMemoryCache;
         }
@@ -43,15 +43,15 @@ public class KeySessionService
         if (response.IsSuccessStatusCode)
         {
             var signingCredentials = new SigningCredentials(rsaCertificateKey, "RS256");
-            var sessionId = await response.Content.ReadAsStringAsync();
+            var auth_session = await response.Content.ReadAsStringAsync();
 
-            _inMemoryCache = (sessionId, signingCredentials);
+            _inMemoryCache = (auth_session, signingCredentials);
 
             // TODO persist key in TPM and re-use
 
             return _inMemoryCache;
         }
 
-        throw new ArgumentNullException("sessionId", "something went wrong");
+        throw new ArgumentNullException("auth_session", "something went wrong");
     }
 }
