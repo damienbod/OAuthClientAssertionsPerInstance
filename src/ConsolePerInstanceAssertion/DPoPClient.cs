@@ -42,7 +42,7 @@ public class DPoPClient : BackgroundService
                 new KeyValuePair<string, string>("email", "your.email@email.ch")
             };
             var content = new FormUrlEncodedContent(formData);
-            var onboardingClientResponse = await onboardingClient.PostAsync("api/OnboardingUser/StartEmailVerification", content, stoppingToken);
+            var onboardingClientResponse = await onboardingClient.PostAsync("api/AuthorizationChallengeRequest/StartEmailVerification", content, stoppingToken);
 
 
 

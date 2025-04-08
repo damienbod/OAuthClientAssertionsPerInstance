@@ -5,11 +5,11 @@ namespace Idp.Controllers;
 
 [Authorize(Policy = "onboardinguserpolicy", AuthenticationSchemes = "onboardinguser")]
 [Route("api/[controller]")]
-public class OnboardingUserController : Controller
+public class AuthorizationChallengeRequestController : Controller
 {
     private readonly OnboardingUserService _onboardingUserService;
 
-    public OnboardingUserController(OnboardingUserService onboardingUserService)
+    public AuthorizationChallengeRequestController(OnboardingUserService onboardingUserService)
     {
         _onboardingUserService = onboardingUserService;
     }
