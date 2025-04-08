@@ -47,7 +47,50 @@ Figure: First-Party Client Authorization Device Request
 - (B) The Authorization Server determines whether the information provided to the Device Registration Endpoint is sufficient. The server creates an 'auth_session' for the public key and returns the 'auth_session' in the response.
 - (C) The Device requests an access token with a client assertion and OAuth client credentials created using the private key. The 'auth_session' is added to the client assertion using the 'device_auth_session' claim. The public key attached to the auth_session is used to validate the client assertion. Optional, DPoP is used to request the token. DPoP does not use the same private, public key pair.
 - (D) The Authorization Server returns an access token from the Token Endpoint. The 'auth_session' is returned in the access token. 
-- (E) The Authorization Challenge Endpoint is used to attach user authentication properties to the device and the auth_session. The Authorization Server validates the access token using the auth_session.
+- (E) The Authorization Challenge Endpoint is used to attach user authentication properties to the device and the auth_session. The Authorization Server authorises the access token using standard OAuth requirements, including DPoP. The auth_session claim is used to authorize specifics for the user.
 - (F) ..
 - (G) repeat for n-user properties
 - (H) ..
+
+
+
+Token Endpoint Successful Response
+
+   This specification extends the OAuth 2.0 [RFC6749] token response
+   defined in Section 5.1 with the additional parameter auth_session
+
+   An example successful token response is below:
+
+   HTTP/1.1 200 OK
+   Content-Type: application/json
+   Cache-Control: no-store
+
+   {
+     "access_token": "2YotnFZFEjr1zCsicMWpAA",
+     "token_type": "Bearer",
+     "expires_in": 3600,
+     "refresh_token": "tGzv3JOkF0XG5Qx2TlKWIA",
+   }
+
+Example of Access Token using DPoP
+
+    {
+      "alg": "RS256",
+      "kid": "9E08135FAEFB9D9E7F7520792656BA0A",
+      "typ": "at+jwt"
+    }.{
+      "iss": "https://localhost:5101",
+      "nbf": 1744120238,
+      "iat": 1744120238,
+      "exp": 1744123838,
+      "aud": "https://localhost:5101/resources",
+      "cnf": {
+        "jkt": "1-xQJRDcRlAGIvAAd1ayQSenXcW5_Ecez_G13qdcM6c"
+      },
+      "scope": [
+        "auth_session:AC7E69B69D627CDDA61AF41518B046E1",
+        "OnboardingUserScope"
+      ],
+      "client_id": "onboarding-user-client",
+      "jti": "7651BD4201E947DA4220A01D7207F44E"
+    }

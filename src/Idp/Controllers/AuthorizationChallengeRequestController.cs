@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Idp.Controllers;
@@ -18,10 +19,11 @@ public class AuthorizationChallengeRequestController : Controller
     /// Session exists in cache, get from cache and create
     /// </summary>
     [HttpPost("StartEmailVerification")]
-    public IActionResult StartEmailVerification(string email)
+    public async Task<IActionResult> StartEmailVerificationAsync(string email)
     {
         string authSession = GetAuthSession();
 
+        var token = await HttpContext.GetTokenAsync("access_token");
         _onboardingUserService.ProcessAuthSessionAndEmail(authSession, email);
 
         // TODO
