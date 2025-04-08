@@ -5,7 +5,7 @@
                                                 |   Authorization   |
                           (A) Device            |      Server       |
                               Registration      |                   |
-                              Request           |+-----------------+|
+             +----------+     Request           |+-----------------+|
 (A)Client+---|  First-  |---------------------->||   Registration  ||
    Starts|   |  Party   |                       ||     Endpoint    ||
    App   +-->|  Client  |<----------------------||                 ||
@@ -43,7 +43,7 @@
 ~~~
 Figure: First-Party Client Authorization Device Request
 
-- (A) The first-party client starts the flow and creates an asymmetric private, public key pair. The client initiates the authorization request by making a POST request to the Device Registration Endpoint using the public key.
+- (A) The first-party client starts application for the first time and creates an asymmetric private, public key pair. The client initiates the authorization request by making a POST request to the Device Registration Endpoint using the public key.
 - (B) The Authorization Server determines whether the information provided to the Device Registration Endpoint is sufficient. The server creates an 'auth_session' for the public key and returns the 'auth_session' in the response.
 - (C) The Device requests an access token with a client assertion and OAuth client credentials created using the private key. The 'auth_session' is added to the client assertion using the 'device_auth_session' claim. The public key attached to the auth_session is used to validate the client assertion. Optional, DPoP is used to request the token. DPoP does not use the same private, public key pair.
 - (D) The Authorization Server returns an access token from the Token Endpoint. The 'auth_session' is returned in the access token. 
@@ -53,6 +53,46 @@ Figure: First-Party Client Authorization Device Request
 - (H) ..
 
 
+ Device Registration Request
+
+  POST /token HTTP/1.1
+    Host: as.example.com
+    ...
+    client_id=cid_235saw4r4
+    &grant_type=fp_register
+    &public_key=<public_key>
+    &state=<state>
+    &nonce=<nonce>
+ 
+Device Registration Response
+
+   An example successful device registration response is below:
+
+   HTTP/1.1 200 OK
+   Content-Type: application/json
+   Cache-Control: no-store
+
+   {
+     "fp_token": "2YotnFZFEjr1zCsicMWpAA",
+     "token_type": "jwt",
+     "state": "<state>"
+     "expires_in": 600
+   }
+
+   Example of FP Token
+
+   {
+      "alg": "RS256",
+      "kid": "9E08135FAEFB9D9E7F7520792656BA0A",
+      "typ": "fp+jwt"
+    }.{
+      "iss": "https://localhost:5101",
+      "nbf": 1744120238,
+      "iat": 1744120238,
+      "exp": 1744123838,
+      "auth_session:AC7E69B69D627CDDA61AF41518B046E1",
+      "nonce": "<nonce>"
+    }
 
 Token Endpoint Successful Response
 
