@@ -55,96 +55,123 @@ Figure: First-Party Client Authorization Device Request
 
 ## Device Registration Request
 
-  POST /token HTTP/1.1
-    Host: as.example.com
-    ...
-    client_id=cid_235saw4r4
-    &grant_type=fp_register
-    &public_key=<public_key>
-    &state=<state>
-    &nonce=<nonce>
-    &code_challenge=<code_challenge>
- 
+~~~
+POST /token HTTP/1.1
+Host: as.example.com
+...
+client_id=cid_235saw4r4
+&grant_type=fp_register
+&public_key=<public_key>
+&state=<state>
+&nonce=<nonce>
+&code_challenge=<code_challenge>
+ ~~~
+
 ## Device Registration Response
 
-   An example successful device registration response is below:
+An example successful device registration response is below:
 
-   HTTP/1.1 200 OK
-   Content-Type: application/json
-   Cache-Control: no-store
+~~~
+HTTP/1.1 200 OK
+Content-Type: application/json
+Cache-Control: no-store
 
-   {
-     "fp_token": "2YotnFZFEjr1zCsicMWpAA",
-     "token_type": "fp+jwt",
-     "state": "<state>"
-     "expires_in": 600
-   }
+{
+    "fp_token": "2YotnFZFEjr1zCsicMWpAA",
+    "token_type": "fp+jwt",
+    "state": "<state>"
+    "expires_in": 600
+}
+~~~
 
-   Example of FP Token
+Example of FP Token
 
-   {
-      "alg": "RS256",
-      "kid": "9E08135FAEFB9D9E7F7520792656BA0A",
-      "typ": "fp+jwt"
-    }.{
-      "iss": "https://localhost:5101",
-      "nbf": 1744120238,
-      "iat": 1744120238,
-      "exp": 1744123838,
-      "auth_session": "AC7E69B69D627CDDA61AF41518B046E1",
-      "nonce": "<nonce>"
-    }
+~~~
+{
+    "alg": "RS256",
+    "kid": "9E08135FAEFB9D9E7F7520792656BA0A",
+    "typ": "fp+jwt"
+}.{
+    "iss": "https://localhost:5101",
+    "nbf": 1744120238,
+    "iat": 1744120238,
+    "exp": 1744123838,
+    "auth_session": "AC7E69B69D627CDDA61AF41518B046E1",
+    "nonce": "<nonce>"
+}
+~~~
 
 ## Client Credentials token request using client assertion
 
+~~~
+{
+  "aud": "https://localhost:5101/connect/token",
+  "iss": "onboarding-user-client",
+  "exp": 1744142406,
+  "jti": "668723c5-7324-4879-a780-83c1edf2232d",
+  "sub": "onboarding-user-client",
+  "iat": 1744142346,
+  "device_auth_session": "E2524405BA1EF4A956CA2B12000F7BFC",
+  "nbf": 1744142346
+}
+~~~
+
+## Token Endpoint Client Assertion request
+
 ## Token Endpoint Successful Response
 
-   This specification extends the OAuth 2.0 [RFC6749] token response
-   defined in Section 5.1 with the additional parameter auth_session
+This specification extends the OAuth 2.0 [RFC6749] token response
+defined in Section 5.1 with the additional parameter auth_session
 
-   An example successful token response is below:
+An example successful token response is below:
 
-   HTTP/1.1 200 OK
-   Content-Type: application/json
-   Cache-Control: no-store
+~~~
+HTTP/1.1 200 OK
+Content-Type: application/json
+Cache-Control: no-store
 
-   {
-     "access_token": "2YotnFZFEjr1zCsicMWpAA",
-     "token_type": "Bearer",
-     "expires_in": 3600,
-     "refresh_token": "tGzv3JOkF0XG5Qx2TlKWIA",
-   }
+{
+    "access_token": "2YotnFZFEjr1zCsicMWpAA",
+    "token_type": "Bearer",
+    "expires_in": 3600,
+    "refresh_token": "tGzv3JOkF0XG5Qx2TlKWIA",
+}
+~~~
 
 ### Example of Access Token using DPoP
 
-    {
-      "alg": "RS256",
-      "kid": "9E08135FAEFB9D9E7F7520792656BA0A",
-      "typ": "at+jwt"
-    }.{
-      "iss": "https://localhost:5101",
-      "nbf": 1744120238,
-      "iat": 1744120238,
-      "exp": 1744123838,
-      "aud": "https://localhost:5101/resources",
-      "cnf": {
-        "jkt": "1-xQJRDcRlAGIvAAd1ayQSenXcW5_Ecez_G13qdcM6c"
-      },
-      "scope": [
-        "auth_session:AC7E69B69D627CDDA61AF41518B046E1",
-        "OnboardingUserScope"
-      ],
-      "client_id": "onboarding-user-client",
-      "jti": "7651BD4201E947DA4220A01D7207F44E"
-    }
+~~~
+{
+    "alg": "RS256",
+    "kid": "9E08135FAEFB9D9E7F7520792656BA0A",
+    "typ": "at+jwt"
+}.{
+    "iss": "https://localhost:5101",
+    "nbf": 1744120238,
+    "iat": 1744120238,
+    "exp": 1744123838,
+    "aud": "https://localhost:5101/resources",
+    "cnf": {
+    "jkt": "1-xQJRDcRlAGIvAAd1ayQSenXcW5_Ecez_G13qdcM6c"
+    },
+    "scope": [
+    "auth_session:AC7E69B69D627CDDA61AF41518B046E1",
+    "OnboardingUserScope"
+    ],
+    "client_id": "onboarding-user-client",
+    "jti": "7651BD4201E947DA4220A01D7207F44E"
+}
+~~~
 
 ## Authorization Challenge Request
 
-  POST /token HTTP/1.1
-    Host: as.example.com
-    Authorization: DPoP "access_token"
-    ...
-    &email=<email_address>
-    &code_verifier=<code_verifier>
+~~~
+POST /token HTTP/1.1
+Host: as.example.com
+Authorization: DPoP "access_token"
+...
+&email=<email_address>
+&code_verifier=<code_verifier>
+~~~
 
-## Authorization Challenge Repsonse
+## Authorization Challenge Response
