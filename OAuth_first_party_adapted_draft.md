@@ -103,6 +103,8 @@ Example of FP Token
 
 ## Token Endpoint Client Credentials token request using client assertion Request
 
+The Authorization Server uses the 'device_auth_session' to find the correct public key to authenticate the client assertion. The value is added to the access token on a successful validation. 
+
 ~~~
 {
   "aud": "https://localhost:5101/connect/token",
@@ -164,7 +166,7 @@ Cache-Control: no-store
 ## Authorization Challenge Request
 
 ~~~
-POST /token HTTP/1.1
+POST /AuthorizationChallengeRequest HTTP/1.1
 Host: as.example.com
 Authorization: DPoP "access_token"
 ...
@@ -172,4 +174,7 @@ Authorization: DPoP "access_token"
 &code_verifier=<code_verifier>
 ~~~
 
-## Authorization Challenge Response
+## Using the access token on a resource server
+
+The auth_session is included inthe access token. This claim is used to implement any further device/user authorization requirements.
+The resource server can decide on what user properties are required to allow access. 
