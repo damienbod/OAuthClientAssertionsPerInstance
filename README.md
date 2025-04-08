@@ -47,3 +47,9 @@ https://docs.duendesoftware.com/identityserver/v7/tokens/authentication/jwt/
 https://docs.duendesoftware.com/foss/accesstokenmanagement/advanced/client_assertions/
 
 https://www.scottbrady.io/oauth/removing-shared-secrets-for-oauth-client-authentication
+
+## Specs
+
+https://www.rfc-editor.org/rfc/rfc7636
+
+https://datatracker.ietf.org/doc/draft-ietf-oauth-first-party-apps/
