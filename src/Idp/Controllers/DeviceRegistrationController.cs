@@ -5,11 +5,11 @@ namespace Idp.Controllers;
 
 [AllowAnonymous]
 [Route("api/[controller]")]
-public class OnboardingController : Controller
+public class DeviceRegistrationController : Controller
 {
     private readonly PublicKeyService _publicKeyService;
 
-    public OnboardingController(PublicKeyService publicKeyService)
+    public DeviceRegistrationController(PublicKeyService publicKeyService)
     {
         _publicKeyService = publicKeyService;
     }
@@ -21,7 +21,7 @@ public class OnboardingController : Controller
     /// </summary>
     /// <param name="publicKey">Public key which is used by the session creator</param>
     [HttpPost]
-    public string CreateSession(string publicKey)
+    public string CreateAuthSession(string publicKey)
     {
         // TODO
         // validation and DDoS protection required...

@@ -38,7 +38,7 @@ public class KeySessionService
 
         // Encodes the key-value pairs for the ContentType 'application/x-www-form-urlencoded'
         HttpContent content = new FormUrlEncodedContent(formData);
-        var response = await httpClient.PostAsync("https://localhost:5101/api/Onboarding", content);
+        var response = await httpClient.PostAsync("https://localhost:5101/api/DeviceRegistration", content);
 
         if (response.IsSuccessStatusCode)
         {
