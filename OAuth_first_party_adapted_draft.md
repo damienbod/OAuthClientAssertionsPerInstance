@@ -152,11 +152,11 @@ Cache-Control: no-store
     "exp": 1744123838,
     "aud": "https://localhost:5101/resources",
     "cnf": {
-    "jkt": "1-xQJRDcRlAGIvAAd1ayQSenXcW5_Ecez_G13qdcM6c"
+        "jkt": "1-xQJRDcRlAGIvAAd1ayQSenXcW5_Ecez_G13qdcM6c"
     },
     "scope": [
-    "auth_session:AC7E69B69D627CDDA61AF41518B046E1",
-    "OnboardingUserScope"
+        "auth_session:AC7E69B69D627CDDA61AF41518B046E1",
+        "OnboardingUserScope"
     ],
     "client_id": "onboarding-user-client",
     "jti": "7651BD4201E947DA4220A01D7207F44E"
