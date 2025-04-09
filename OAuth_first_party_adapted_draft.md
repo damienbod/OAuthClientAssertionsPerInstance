@@ -164,9 +164,16 @@ Cache-Control: no-store
 
 ## Authorization Challenge Request
 
-Body can be anything depending on the application authorization requirements.
+The request body can be anything depending on the application authorization requirements.
 
 A phishing resistant user authentication is recommended on the device for the user. 
+
+Possible user authentication methods on the device:
+
+- email
+- SMS
+- Passkeys
+- OTP
 
 ~~~
 POST /AuthorizationChallengeRequest HTTP/1.1
@@ -180,3 +187,7 @@ Authorization: DPoP "access_token"
 
 The auth_session is included inthe access token. This claim is used to implement any further device/user authorization requirements.
 The resource server can decide on what user properties are required to allow access. 
+
+## Error Responses
+
+If the access token is valid but the user authentication methods attached to the device is missing for the request, an HTTP 403 or a 404 is returned.
