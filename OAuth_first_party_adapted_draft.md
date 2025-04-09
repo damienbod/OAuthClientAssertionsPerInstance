@@ -64,7 +64,6 @@ client_id=cid_235saw4r4
 &public_key=<public_key>
 &state=<state>
 &nonce=<nonce>
-&code_challenge=<code_challenge>
  ~~~
 
 ## Device Registration Response
@@ -165,13 +164,16 @@ Cache-Control: no-store
 
 ## Authorization Challenge Request
 
+Body can be anything depending on the application authorization requirements.
+
+A phishing resistant user authentication is recommended on the device for the user. 
+
 ~~~
 POST /AuthorizationChallengeRequest HTTP/1.1
 Host: as.example.com
 Authorization: DPoP "access_token"
 ...
 &email=<email_address>
-&code_verifier=<code_verifier>
 ~~~
 
 ## Using the access token on a resource server
