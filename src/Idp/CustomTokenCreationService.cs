@@ -21,6 +21,8 @@ public class CustomTokenCreationService : DefaultTokenCreationService
         var clientName = token.ClientId;
         if ((clientName == "mobile-dpop-client") || (clientName == "onboarding-user-client"))
         {
+            // get user claims attached to device
+            // get user onboarding level
             token.Claims.Add(new Claim("custom1", "custom1Value"));
         }
 

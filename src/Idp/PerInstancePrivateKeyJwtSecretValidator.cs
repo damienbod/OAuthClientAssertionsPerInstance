@@ -75,6 +75,8 @@ public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
             var securityKey = _publicKeyService.GetPublicSecurityKey(authSessionFromAssertion);
             trustedKeys = [securityKey];
 
+            // TODO validate that only one auth_session scope is requested.
+
             // auth_session in the scope MUST match the device_auth_session in the client assertion to prevent session hijacking.
             var scopeAuthSession = GetAuthSessionRefFromRequestedScope(_httpContextAccessor.HttpContext);
             if (!authSessionFromAssertion.Equals(scopeAuthSession))
