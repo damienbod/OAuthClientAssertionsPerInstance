@@ -1,4 +1,5 @@
 using Duende.AspNetCore.Authentication.JwtBearer.DPoP;
+using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Validation;
 using Idp.Data;
 using Idp.Models;
@@ -19,6 +20,7 @@ internal static class HostingExtensions
         builder.Services.AddTransient<PublicKeyService>();
         builder.Services.AddScoped<OnboardingUserService>();
         builder.Services.AddScoped<IScopeParser, ParameterizedScopeParser>();
+        builder.Services.AddTransient<ITokenCreationService, CustomTokenCreationService>();
 
         builder.Services.AddRazorPages();
 

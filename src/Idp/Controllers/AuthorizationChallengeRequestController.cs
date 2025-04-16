@@ -19,11 +19,10 @@ public class AuthorizationChallengeRequestController : Controller
     /// Session exists in cache, get from cache and create
     /// </summary>
     [HttpPost("StartEmailVerification")]
-    public async Task<IActionResult> StartEmailVerificationAsync(string email)
+    public IActionResult StartEmailVerification(string email)
     {
         string authSession = GetAuthSession();
 
-        var token = await HttpContext.GetTokenAsync("access_token");
         _onboardingUserService.ProcessAuthSessionAndEmail(authSession, email);
 
         // TODO

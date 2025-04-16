@@ -36,6 +36,29 @@ Add-Migration "InitializeApp" -Context ApplicationDbContext
 Update-Database -Context ApplicationDbContext
 ```
 
+## Notes
+
+The DefaultTokenCreationService can be used to add custom claims to the token
+
+```
+public class CustomTokenCreationService : DefaultTokenCreationService
+{
+    public CustomTokenCreationService(IClock clock,
+        IKeyMaterialService keys,
+        IdentityServerOptions options,
+        ILogger<DefaultTokenCreationService> logger)
+        : base(clock, keys, options, logger)
+    {
+    }
+
+    protected override Task<string> CreatePayloadAsync(Token token)
+    {
+        token.Audiences.Add("custom1");
+        return base.CreatePayloadAsync(token);
+    }
+}
+```
+
 ## Links
 
 https://docs.duendesoftware.com/identityserver/v7/tokens/authentication/jwt/
