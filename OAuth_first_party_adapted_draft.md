@@ -79,7 +79,7 @@ Cache-Control: no-store
     "fp_token": "2YotnFZFEjr1zCsicMWpAA",
     "token_type": "fp+jwt",
     "state": "<state>"
-    "expires_in": 600
+    "expires_in": 420
 }
 ~~~
 
@@ -94,6 +94,7 @@ Example of FP Token
     "iss": "https://localhost:5101",
     "nbf": 1744120238,
     "iat": 1744120238,
+    "aud": "<client_id>"
     "exp": 1744123838,
     "auth_session": "AC7E69B69D627CDDA61AF41518B046E1",
     "nonce": "<nonce>"
