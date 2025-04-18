@@ -39,18 +39,28 @@ public class DeviceRegistrationController : Controller
         // send request in body
 
         var authSession = _publicKeyService.CreateSession(deviceRegistrationRequest.public_key);
-        var sc = await _keys.GetSigningCredentialsAsync();
+        var signingCredential = await _keys.GetSigningCredentialsAsync();
+
+        var scheme = HttpContext.Request.Scheme;
+        var host = HttpContext.Request.Host.Value;
+        var issuer = $"{scheme}://{host}";
+
 
         var deviceRegistrationResponse = new DeviceRegistrationResponse
         {
-            FpToken = GenerateJwtTokenAsync(authSession, deviceRegistrationRequest.nonce, sc),
+            FpToken = GenerateJwtTokenAsync(authSession, 
+                deviceRegistrationRequest.nonce, 
+                signingCredential, 
+                issuer, 
+                deviceRegistrationRequest.client_id),
+
             State = deviceRegistrationRequest.state
         };
 
         return deviceRegistrationResponse;
     }
 
-    public static string GenerateJwtTokenAsync(string authSession, string nonce, SigningCredentials signingCredentials)
+    public static string GenerateJwtTokenAsync(string authSession, string nonce, SigningCredentials signingCredentials, string issuer, string clientId)
     {
         var alg = signingCredentials.Algorithm;
 
@@ -79,7 +89,8 @@ public class DeviceRegistrationController : Controller
             Subject = subject,
             Expires = DateTime.UtcNow.AddMinutes(7),
             IssuedAt = DateTime.UtcNow,
-            Issuer = "https://localhost:5101/",
+            Audience = clientId,
+            Issuer = issuer,
             SigningCredentials = signingCredentials,
             TokenType = "fp+jwt"
         };
