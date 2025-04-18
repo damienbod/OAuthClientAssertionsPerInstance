@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using static Duende.IdentityModel.OidcConstants;
 
 namespace ConsolePerInstanceAssertion;
 
@@ -28,13 +30,21 @@ public class KeySessionService
         var rsa2048 = RSA.Create(2048);
         var rsaCertificateKey = new RsaSecurityKey(rsa2048);
         var publicKeyPem = rsa2048.ExportRSAPublicKeyPem();
-
         var httpClient = new HttpClient();
 
+        //client_id = cid_235saw4r4
+        //& grant_type = fp_register
+        //& public_key =< public_key >
+        //&state =< state >
+        //&nonce =< nonce >
         var formData = new List<KeyValuePair<string, string>>
-            {
-                new KeyValuePair<string, string>("publicKey", publicKeyPem)
-            };
+        {
+            new KeyValuePair<string, string>("client_id", "cid-fp-device"),
+            new KeyValuePair<string, string>("grant_type", "fp_register"),
+            new KeyValuePair<string, string>("public_key", publicKeyPem),
+            new KeyValuePair<string, string>("state", "32state32"),
+            new KeyValuePair<string, string>("nonce", "32nonce32")
+        };
 
         // Encodes the key-value pairs for the ContentType 'application/x-www-form-urlencoded'
         HttpContent content = new FormUrlEncodedContent(formData);

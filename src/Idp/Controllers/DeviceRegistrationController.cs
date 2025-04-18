@@ -1,5 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Duende.IdentityServer.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text.Json.Serialization;
 
 namespace Idp.Controllers;
 
@@ -8,10 +13,12 @@ namespace Idp.Controllers;
 public class DeviceRegistrationController : Controller
 {
     private readonly PublicKeyService _publicKeyService;
+    private readonly IKeyMaterialService _keys;
 
-    public DeviceRegistrationController(PublicKeyService publicKeyService)
+    public DeviceRegistrationController(PublicKeyService publicKeyService, IKeyMaterialService keys)
     {
         _publicKeyService = publicKeyService;
+        _keys = keys;
     }
 
     /// <summary>
@@ -21,18 +28,115 @@ public class DeviceRegistrationController : Controller
     /// </summary>
     /// <param name="publicKey">Public key which is used by the session creator</param>
     [HttpPost]
-    public string CreateAuthSession(string publicKey)
+    public async Task<DeviceRegistrationResponse> CreateAuthSessionAsync(DeviceRegistrationRequest deviceRegistrationRequest)
     {
         // TODO
         // validation and DDoS protection required...
         // Maybe as secret to authenticate, prevent simple bots
 
-        // TODO
-        // Encypt auth_session using publickey
-        // Use PKCE with email as second step
+        // Encrypt auth_session using public_key
         // Add nonce and state parameters as in code flow
         // send request in body
-        // return signed JWT with payload
-        return _publicKeyService.CreateSession(publicKey);
+
+        var authSession = _publicKeyService.CreateSession(deviceRegistrationRequest.public_key);
+        var sc = await _keys.GetSigningCredentialsAsync();
+
+        var deviceRegistrationResponse = new DeviceRegistrationResponse
+        {
+            FpToken = GenerateJwtTokenAsync(authSession, deviceRegistrationRequest.nonce, sc),
+            State = deviceRegistrationRequest.state
+        };
+
+        return deviceRegistrationResponse;
     }
+
+    public static string GenerateJwtTokenAsync(string authSession, string nonce, SigningCredentials signingCredentials)
+    {
+        var alg = signingCredentials.Algorithm;
+
+        //{
+        //  "alg": "RS256",
+        //  "kid": "....",
+        //  "typ": "fp+jwt",
+        //}
+        //{
+        //    "iss": "https://localhost:5101",
+        //    "nbf": 1744120238,
+        //    "iat": 1744120238,
+        //    "exp": 1744123838,
+        //    "auth_session": "AC7E69B69D627CDDA61AF41518B046E1",
+        //    "nonce": "<nonce>"
+        //}
+
+        var subject = new ClaimsIdentity([
+            new Claim("nonce", nonce),
+            new Claim("auth_session", authSession),
+        ]);
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = subject,
+            Expires = DateTime.UtcNow.AddMinutes(7),
+            IssuedAt = DateTime.UtcNow,
+            Issuer = "https://localhost:5101/",
+            SigningCredentials = signingCredentials,
+            TokenType = "fp+jwt"
+        };
+
+        tokenDescriptor.AdditionalHeaderClaims ??= new Dictionary<string, object>();
+
+        if (!tokenDescriptor.AdditionalHeaderClaims.ContainsKey("alg"))
+        {
+            tokenDescriptor.AdditionalHeaderClaims.Add("alg", alg);
+        }
+
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+
+        return tokenHandler.WriteToken(token);
+    }
+}
+
+public class DeviceRegistrationRequest
+{
+    //client_id=cid_235saw4r4
+    //&grant_type=fp_register
+    //&public_key=<public_key>
+    //&state=<state>
+    //&nonce=<nonce>
+
+    [JsonPropertyName("client_id")]
+    public string client_id { get; set; } = string.Empty;
+
+    [JsonPropertyName("grant_type")]
+    public string grant_type { get; set; } = string.Empty;
+
+    [JsonPropertyName("public_key")]
+    public string public_key { get; set; } = string.Empty;
+
+    [JsonPropertyName("state")]
+    public string state { get; set; } = string.Empty;
+
+    [JsonPropertyName("nonce")]
+    public string nonce { get; set; } = string.Empty;
+}
+
+public class DeviceRegistrationResponse
+{
+    //"fp_token": "2YotnFZFEjr1zCsicMWpAA",
+    //"token_type": "fp+jwt",
+    //"state": "<state>"
+    //"expires_in": 420
+
+    [JsonPropertyName("fp_token")]
+    public string FpToken { get; set; } = string.Empty;
+
+    [JsonPropertyName("token_type")]
+    public string TokenType { get; set; } = "fp+jwt";
+
+    [JsonPropertyName("state")]
+    public string State { get; set; } = string.Empty;
+
+    [JsonPropertyName("expires_in")]
+    public string ExpiresIn { get; set; } = "420";
 }
