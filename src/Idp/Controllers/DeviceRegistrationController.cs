@@ -31,12 +31,9 @@ public class DeviceRegistrationController : Controller
     public async Task<DeviceRegistrationResponse> CreateAuthSessionAsync(DeviceRegistrationRequest deviceRegistrationRequest)
     {
         // TODO
+        // validate:  client_id=cid_235saw4r4 &grant_type=fp_register
         // validation and DDoS protection required...
         // Maybe as secret to authenticate, prevent simple bots
-
-        // Encrypt auth_session using public_key
-        // Add nonce and state parameters as in code flow
-        // send request in body
 
         var authSession = _publicKeyService.CreateSession(deviceRegistrationRequest.public_key);
         var signingCredential = await _keys.GetSigningCredentialsAsync();
@@ -73,6 +70,7 @@ public class DeviceRegistrationController : Controller
         //    "iss": "https://localhost:5101",
         //    "nbf": 1744120238,
         //    "iat": 1744120238,
+        //    "aud": "<client_id>"
         //    "exp": 1744123838,
         //    "auth_session": "AC7E69B69D627CDDA61AF41518B046E1",
         //    "nonce": "<nonce>"
