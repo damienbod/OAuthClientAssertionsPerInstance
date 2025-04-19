@@ -52,10 +52,10 @@ public class KeySessionService
         var formData = new List<KeyValuePair<string, string>>
         {
             new KeyValuePair<string, string>("client_id", clientId),
-            new KeyValuePair<string, string>("grant_type", "urn:ietf:params:oauth:grant-type:fp_register888888"),
+            new KeyValuePair<string, string>("grant_type", "urn:ietf:params:oauth:grant-type:fp_register"),
             new KeyValuePair<string, string>("public_key", publicKeyPem),
-            new KeyValuePair<string, string>("state", nonce),
-            new KeyValuePair<string, string>("nonce", state)
+            new KeyValuePair<string, string>("state", state),
+            new KeyValuePair<string, string>("nonce", nonce)
         };
 
         // Encodes the key-value pairs for the ContentType 'application/x-www-form-urlencoded'
