@@ -18,7 +18,9 @@ public class OAuthConsts
     public const string RESPONSE_TOKEN_TYPE = "token_type";
     public const string RESPONSE_EXPIRES_IN = "expires_in";
     public const string RESPONSE_FP_TOKEN = "fp_token";
- 
+
+    public const string GRANT_TYPE = "urn:ietf:params:oauth:grant-type:fp_register";
+
     // https://www.rfc-editor.org/rfc/rfc6749#section-5.2
     public const string RESPONSE_ERROR = "error";
     public const string RESPONSE_ERROR_DESCRIPTION = "error_description";
