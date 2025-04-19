@@ -59,8 +59,8 @@ Figure: First-Party Client Authorization Device Request
 POST /token HTTP/1.1
 Host: as.example.com
 ...
-client_id=cid_235saw4r4
-&grant_type=fp_register
+client_id=<client_id>
+&grant_type=urn:ietf:params:oauth:grant-type:fp_register
 &public_key=<public_key>
 &state=<state>
 &nonce=<nonce>
@@ -79,7 +79,7 @@ Cache-Control: no-store
     "fp_token": "2YotnFZFEjr1zCsicMWpAA",
     "token_type": "fp+jwt",
     "state": "<state>"
-    "expires_in": 600
+    "expires_in": 420
 }
 ~~~
 
@@ -91,11 +91,12 @@ Example of FP Token
     "kid": "9E08135FAEFB9D9E7F7520792656BA0A",
     "typ": "fp+jwt"
 }.{
-    "iss": "https://localhost:5101",
+    "iss": "<issuer>",
     "nbf": 1744120238,
     "iat": 1744120238,
+    "aud": "<client_id>"
     "exp": 1744123838,
-    "auth_session": "AC7E69B69D627CDDA61AF41518B046E1",
+    "auth_session": "<auth_session>",
     "nonce": "<nonce>"
 }
 ~~~
@@ -112,7 +113,7 @@ The Authorization Server uses the 'device_auth_session' to find the correct publ
   "jti": "668723c5-7324-4879-a780-83c1edf2232d",
   "sub": "onboarding-user-client",
   "iat": 1744142346,
-  "device_auth_session": "E2524405BA1EF4A956CA2B12000F7BFC",
+  "device_auth_session": "<auth_session>",
   "nbf": 1744142346
 }
 ~~~

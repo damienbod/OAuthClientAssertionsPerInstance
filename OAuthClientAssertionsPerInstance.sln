@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsolePerInstanceAssertion
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Idp", "src\Idp\Idp.csproj", "{70288A7A-3DC2-7D4C-163B-7A3016EC29A4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthFlow", "AuthFlow\AuthFlow.csproj", "{2BE9BA3E-1EF4-4176-B261-E65565734C0B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{70288A7A-3DC2-7D4C-163B-7A3016EC29A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70288A7A-3DC2-7D4C-163B-7A3016EC29A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70288A7A-3DC2-7D4C-163B-7A3016EC29A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BE9BA3E-1EF4-4176-B261-E65565734C0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BE9BA3E-1EF4-4176-B261-E65565734C0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BE9BA3E-1EF4-4176-B261-E65565734C0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BE9BA3E-1EF4-4176-B261-E65565734C0B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

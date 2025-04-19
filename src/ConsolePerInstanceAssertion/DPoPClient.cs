@@ -44,8 +44,6 @@ public class DPoPClient : BackgroundService
             var content = new FormUrlEncodedContent(formData);
             var onboardingClientResponse = await onboardingClient.PostAsync("api/AuthorizationChallengeRequest/StartEmailVerification", content, stoppingToken);
 
-
-
             // Call mobile API
             var client = _clientFactory.CreateClient("mobile-dpop-client");
             var response = await client.GetAsync("api/values", stoppingToken);
