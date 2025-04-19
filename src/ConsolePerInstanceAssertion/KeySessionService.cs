@@ -59,6 +59,7 @@ public class KeySessionService
             // TODO
             // Validate state
             // Validate JWT signing credential
+            // Validate nbf, exp, iat
             // Validate nonce
             // Validate aud (clientId)
             // Validate iss
