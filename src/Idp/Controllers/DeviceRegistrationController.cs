@@ -31,8 +31,9 @@ public class DeviceRegistrationController : Controller
     public async Task<DeviceRegistrationResponse> CreateAuthSessionAsync(DeviceRegistrationRequest deviceRegistrationRequest)
     {
         // TODO
-        // validate:  client_id=cid_235saw4r4 &grant_type=fp_register
-        // validation and DDoS protection required...
+        // Validate client_id
+        // Validate grant_type=fp_register
+        // DDoS protection required...
         // Maybe as secret to authenticate, prevent simple bots
 
         var authSession = _publicKeyService.CreateSession(deviceRegistrationRequest.public_key);

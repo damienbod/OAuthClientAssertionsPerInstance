@@ -3,9 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
-using static Duende.IdentityModel.OidcConstants;
 
 namespace ConsolePerInstanceAssertion;
 
@@ -32,6 +30,9 @@ public class KeySessionService
         var publicKeyPem = rsa2048.ExportRSAPublicKeyPem();
         var httpClient = new HttpClient();
 
+        var nonce = RandomNumberGenerator.GetHexString(73);
+        var state = RandomNumberGenerator.GetHexString(67);
+        var clientId = "cid-fp-device";
         //client_id = cid_235saw4r4
         //& grant_type = fp_register
         //& public_key =< public_key >
@@ -39,11 +40,11 @@ public class KeySessionService
         //&nonce =< nonce >
         var formData = new List<KeyValuePair<string, string>>
         {
-            new KeyValuePair<string, string>("client_id", "cid-fp-device"),
+            new KeyValuePair<string, string>("client_id", clientId),
             new KeyValuePair<string, string>("grant_type", "fp_register"),
             new KeyValuePair<string, string>("public_key", publicKeyPem),
-            new KeyValuePair<string, string>("state", "32state32"),
-            new KeyValuePair<string, string>("nonce", "32nonce32")
+            new KeyValuePair<string, string>("state", nonce),
+            new KeyValuePair<string, string>("nonce", state)
         };
 
         // Encodes the key-value pairs for the ContentType 'application/x-www-form-urlencoded'
@@ -55,6 +56,13 @@ public class KeySessionService
             var signingCredentials = new SigningCredentials(rsaCertificateKey, "RS256");
             var auth_session = await response.Content.ReadAsStringAsync();
 
+            // TODO
+            // Validate state
+            // Validate JWT signing credential
+            // Validate nonce
+            // Validate aud (clientId)
+            // Validate iss
+            // Validate  "typ": "fp+jwt"
             _inMemoryCache = (auth_session, signingCredentials);
 
             // TODO persist key in TPM and re-use
