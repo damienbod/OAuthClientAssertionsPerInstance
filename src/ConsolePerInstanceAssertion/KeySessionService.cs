@@ -113,6 +113,12 @@ public class KeySessionService
                 throw new ArgumentNullException("auth_session", "Nonce validation failed");
             }
 
+            if (state != deviceRegistrationResponse.State)
+            {
+                Console.WriteLine("State validation failed");
+                throw new ArgumentNullException("auth_session", "State validation failed");
+            }
+
             var authSession = ValidateTokenResponsePayload.GetAuthSession(deviceTokenValidationResult.ClaimsIdentity!);
             _inMemoryCache = (authSession, signingCredentials);
 
