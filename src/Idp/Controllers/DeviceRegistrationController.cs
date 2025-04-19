@@ -32,7 +32,7 @@ public class DeviceRegistrationController : Controller
     {
         // TODO
         // Validate client_id
-        // Validate grant_type=fp_register
+        // Validate grant_type = "urn:ietf:params:oauth:grant-type:fp_register"
         // DDoS protection required...
         // Maybe as secret to authenticate, prevent simple bots
 
@@ -42,7 +42,6 @@ public class DeviceRegistrationController : Controller
         var scheme = HttpContext.Request.Scheme;
         var host = HttpContext.Request.Host.Value;
         var issuer = $"{scheme}://{host}";
-
 
         var deviceRegistrationResponse = new DeviceRegistrationResponse
         {
