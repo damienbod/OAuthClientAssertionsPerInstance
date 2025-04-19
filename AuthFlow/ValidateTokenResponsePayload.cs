@@ -6,13 +6,19 @@ namespace AuthFlow;
 
 public static class ValidateTokenResponsePayload
 {
-    public static (bool Valid, string Reason, string Error) IsValid(DeviceRegistrationResponse deviceRegistrationResponse, AuthFlowConfiguration oauthTokenExchangeConfiguration)
+    public static (bool Valid, string Reason, string Error) IsValid(DeviceRegistrationResponse deviceRegistrationResponse, AuthFlowConfiguration authFlowConfiguration, string state)
     {
         if (!deviceRegistrationResponse.TokenType.Equals("fp+jwt"))
         {
             return (false, "token_type parameter has an incorrect value, expected: fp+jwt",
                 OAuthConsts.ERROR_UNSUPPORTED_GRANT_TYPE);
         };
+
+        if (!deviceRegistrationResponse.State.Equals(state))
+        {
+            return (false, $"state parameter has an incorrect value, expected: {state}",
+                OAuthConsts.ERROR_INVALID_REQUEST);
+        }
 
         return (true, string.Empty, string.Empty);
     }

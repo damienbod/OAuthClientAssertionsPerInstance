@@ -82,11 +82,11 @@ public class KeySessionService
             // Validate  "typ": "fp+jwt"
 
             var (Valid, Reason, Error) = ValidateTokenResponsePayload
-            .IsValid(deviceRegistrationResponse, _authFlowConfiguration);
+                .IsValid(deviceRegistrationResponse, _authFlowConfiguration, state);
 
             if (!Valid)
             {
-                Console.WriteLine("UnauthorizedValidationParametersFailed {Reason} {Error}", Reason, Error);
+                Console.WriteLine($"UnauthorizedValidationParametersFailed {Reason} {Error}");
                 throw new ArgumentNullException("auth_session", "UnauthorizedValidationParametersFailed");
             }
 
@@ -102,7 +102,7 @@ public class KeySessionService
 
             if (!deviceTokenValidationResult.Valid)
             {
-                Console.WriteLine("UnauthorizedValidationTokenAndSignatureFailed {Reason} {Error}", Reason, Error);
+                Console.WriteLine($"UnauthorizedValidationTokenAndSignatureFailed {Reason} {Error}");
                 throw new ArgumentNullException("auth_session", "UnauthorizedValidationTokenAndSignatureFailed");
             }
 
@@ -111,12 +111,6 @@ public class KeySessionService
             {
                 Console.WriteLine("Nonce validation failed");
                 throw new ArgumentNullException("auth_session", "Nonce validation failed");
-            }
-
-            if (state != deviceRegistrationResponse.State)
-            {
-                Console.WriteLine("State validation failed");
-                throw new ArgumentNullException("auth_session", "State validation failed");
             }
 
             var authSession = ValidateTokenResponsePayload.GetAuthSession(deviceTokenValidationResult.ClaimsIdentity!);
