@@ -8,9 +8,9 @@ public static class ValidateTokenResponsePayload
 {
     public static (bool Valid, string Reason, string Error) IsValid(DeviceRegistrationResponse deviceRegistrationResponse, AuthFlowConfiguration oauthTokenExchangeConfiguration)
     {
-        if (!deviceRegistrationResponse.TokenType.Equals(OAuthConsts.RESPONSE_TOKEN_TYPE))
+        if (!deviceRegistrationResponse.TokenType.Equals("fp+jwt"))
         {
-            return (false, $"token_type parameter has an incorrect value, expected {OAuthConsts.RESPONSE_TOKEN_TYPE}",
+            return (false, "token_type parameter has an incorrect value, expected: fp+jwt",
                 OAuthConsts.ERROR_UNSUPPORTED_GRANT_TYPE);
         };
 
@@ -33,9 +33,9 @@ public static class ValidateTokenResponsePayload
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKeys = signingKeys,
                 ValidateIssuer = true,
-                ValidIssuer = authFlowConfiguration.AccessTokenAuthority,
+                ValidIssuer = authFlowConfiguration.TokenAuthority,
                 ValidateAudience = true,
-                ValidAudience = authFlowConfiguration.AccessTokenAudience
+                ValidAudience = authFlowConfiguration.ClientId
             };
 
             var tokenValidator = new JsonWebTokenHandler

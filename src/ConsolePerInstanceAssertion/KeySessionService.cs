@@ -7,7 +7,6 @@ using System.Net.Http;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using AuthFlow;
-using System.Runtime.CompilerServices;
 using System.Text.Json;
 
 namespace ConsolePerInstanceAssertion;
@@ -26,7 +25,9 @@ public class KeySessionService
 
     private AuthFlowConfiguration _authFlowConfiguration = new AuthFlowConfiguration
     {
-
+        ClientId = "cid-fp-device",
+        TokenMetadataAddress = "https://localhost:5101/.well-known/openid-configuration",
+        TokenAuthority = "https://localhost:5101"
     };
 
     public async Task<(string? AuthSession, SigningCredentials? SigningCredentials)> CreateGetSessionAsync()
@@ -91,7 +92,7 @@ public class KeySessionService
 
             // get well known endpoints and validate access token sent in the assertion
             var configurationManager = new ConfigurationManager<OpenIdConnectConfiguration>(
-                _authFlowConfiguration.AccessTokenMetadataAddress,
+                _authFlowConfiguration.TokenMetadataAddress,
                 new OpenIdConnectConfigurationRetriever());
 
             var wellKnownEndpoints = await configurationManager.GetConfigurationAsync();
