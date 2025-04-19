@@ -43,7 +43,6 @@ public class KeySessionService
 
         var nonce = RandomNumberGenerator.GetHexString(73);
         var state = RandomNumberGenerator.GetHexString(67);
-        var clientId = "cid-fp-device";
         //client_id = cid_235saw4r4
         //& grant_type = fp_register
         //& public_key =< public_key >
@@ -51,8 +50,8 @@ public class KeySessionService
         //&nonce =< nonce >
         var formData = new List<KeyValuePair<string, string>>
         {
-            new KeyValuePair<string, string>("client_id", clientId),
-            new KeyValuePair<string, string>("grant_type", "urn:ietf:params:oauth:grant-type:fp_register"),
+            new KeyValuePair<string, string>("client_id", _authFlowConfiguration.ClientId),
+            new KeyValuePair<string, string>("grant_type", OAuthConsts.GRANT_TYPE),
             new KeyValuePair<string, string>("public_key", publicKeyPem),
             new KeyValuePair<string, string>("state", state),
             new KeyValuePair<string, string>("nonce", nonce)

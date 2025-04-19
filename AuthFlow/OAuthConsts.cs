@@ -20,6 +20,8 @@ public class OAuthConsts
     public const string RESPONSE_FP_TOKEN = "fp_token";
 
     public const string GRANT_TYPE = "urn:ietf:params:oauth:grant-type:fp_register";
+    public const string TOKEN_TYPE = "fp+jwt";
+    public const string AUTH_SESSION = "auth_session";
 
     // https://www.rfc-editor.org/rfc/rfc6749#section-5.2
     public const string RESPONSE_ERROR = "error";

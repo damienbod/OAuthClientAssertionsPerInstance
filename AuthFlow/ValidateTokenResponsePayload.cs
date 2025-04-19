@@ -8,9 +8,9 @@ public static class ValidateTokenResponsePayload
 {
     public static (bool Valid, string Reason, string Error) IsValid(DeviceRegistrationResponse deviceRegistrationResponse, AuthFlowConfiguration authFlowConfiguration, string state)
     {
-        if (!deviceRegistrationResponse.TokenType.Equals("fp+jwt"))
+        if (!deviceRegistrationResponse.TokenType.Equals(OAuthConsts.TOKEN_TYPE))
         {
-            return (false, "token_type parameter has an incorrect value, expected: fp+jwt",
+            return (false, $"token_type parameter has an incorrect value, expected: {OAuthConsts.TOKEN_TYPE}",
                 OAuthConsts.ERROR_UNSUPPORTED_GRANT_TYPE);
         };
 
@@ -24,9 +24,7 @@ public static class ValidateTokenResponsePayload
     }
 
     public async static Task<(bool Valid, string Reason, ClaimsIdentity? ClaimsIdentity)> ValidateTokenAndSignature(
-        string jwtToken,
-        AuthFlowConfiguration authFlowConfiguration,
-        ICollection<SecurityKey> signingKeys)
+        string jwtToken, AuthFlowConfiguration authFlowConfiguration, ICollection<SecurityKey> signingKeys)
     {
         try
         {
@@ -61,13 +59,13 @@ public static class ValidateTokenResponsePayload
 
     public static string GetAuthSession(ClaimsIdentity claimsIdentity)
     {
-        var auth_session = claimsIdentity.Claims.FirstOrDefault(t => t.Type == "auth_session");
+        var auth_session = claimsIdentity.Claims.FirstOrDefault(t => t.Type == OAuthConsts.AUTH_SESSION);
         return auth_session?.Value ?? string.Empty;
     }
 
     public static string GetNonce(ClaimsIdentity claimsIdentity)
     {
-        var nonce = claimsIdentity.Claims.FirstOrDefault(t => t.Type == "nonce");
+        var nonce = claimsIdentity.Claims.FirstOrDefault(t => t.Type == OAuthConsts.REQUEST_NONCE);
         return nonce?.Value ?? string.Empty;
     }
 }
