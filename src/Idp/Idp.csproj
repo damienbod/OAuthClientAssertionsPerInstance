@@ -25,6 +25,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\AuthFlow\AuthFlow.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <None Update="rsa256-public.pem">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
