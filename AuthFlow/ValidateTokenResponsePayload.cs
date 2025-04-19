@@ -53,9 +53,15 @@ public static class ValidateTokenResponsePayload
         }
     }
 
-    public static string GetPreferredUserName(ClaimsIdentity claimsIdentity)
+    public static string GetAuthSession(ClaimsIdentity claimsIdentity)
     {
-        var preferred_username = claimsIdentity.Claims.FirstOrDefault(t => t.Type == "preferred_username");
-        return preferred_username?.Value ?? string.Empty;
+        var auth_session = claimsIdentity.Claims.FirstOrDefault(t => t.Type == "auth_session");
+        return auth_session?.Value ?? string.Empty;
+    }
+
+    public static string GetNonce(ClaimsIdentity claimsIdentity)
+    {
+        var nonce = claimsIdentity.Claims.FirstOrDefault(t => t.Type == "nonce");
+        return nonce?.Value ?? string.Empty;
     }
 }

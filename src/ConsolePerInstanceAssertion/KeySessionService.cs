@@ -1,9 +1,14 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Microsoft.IdentityModel.Protocols;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using AuthFlow;
+using System.Runtime.CompilerServices;
+using System.Text.Json;
 
 namespace ConsolePerInstanceAssertion;
 
@@ -18,6 +23,11 @@ public class KeySessionService
     /// One signing key per application instance
     /// </summary>
     private static (string? AuthSession, SigningCredentials? SigningCredentials) _inMemoryCache = (null, null);
+
+    private AuthFlowConfiguration _authFlowConfiguration = new AuthFlowConfiguration
+    {
+
+    };
 
     public async Task<(string? AuthSession, SigningCredentials? SigningCredentials)> CreateGetSessionAsync()
     {
@@ -54,8 +64,13 @@ public class KeySessionService
         if (response.IsSuccessStatusCode)
         {
             var signingCredentials = new SigningCredentials(rsaCertificateKey, "RS256");
-            var auth_session = await response.Content.ReadAsStringAsync();
+            var responseResult = await response.Content.ReadAsStringAsync();
+            var deviceRegistrationResponse = JsonSerializer.Deserialize<DeviceRegistrationResponse>(responseResult);
 
+            if (deviceRegistrationResponse == null)
+            {
+                throw new Exception("no response");
+            }
             // TODO
             // Validate state
             // Validate JWT signing credential
@@ -64,7 +79,41 @@ public class KeySessionService
             // Validate aud (clientId)
             // Validate iss
             // Validate  "typ": "fp+jwt"
-            _inMemoryCache = (auth_session, signingCredentials);
+
+            var (Valid, Reason, Error) = ValidateTokenResponsePayload
+            .IsValid(deviceRegistrationResponse, _authFlowConfiguration);
+
+            if (!Valid)
+            {
+                Console.WriteLine("UnauthorizedValidationParametersFailed {Reason} {Error}", Reason, Error);
+                throw new ArgumentNullException("auth_session", "UnauthorizedValidationParametersFailed");
+            }
+
+            // get well known endpoints and validate access token sent in the assertion
+            var configurationManager = new ConfigurationManager<OpenIdConnectConfiguration>(
+                _authFlowConfiguration.AccessTokenMetadataAddress,
+                new OpenIdConnectConfigurationRetriever());
+
+            var wellKnownEndpoints = await configurationManager.GetConfigurationAsync();
+
+            var deviceTokenValidationResult = await ValidateTokenResponsePayload.ValidateTokenAndSignature(
+                deviceRegistrationResponse.FpToken, _authFlowConfiguration, wellKnownEndpoints.SigningKeys);
+
+            if (!deviceTokenValidationResult.Valid)
+            {
+                Console.WriteLine("UnauthorizedValidationTokenAndSignatureFailed {Reason} {Error}", Reason, Error);
+                throw new ArgumentNullException("auth_session", "UnauthorizedValidationTokenAndSignatureFailed");
+            }
+
+            var nonceInResponse = ValidateTokenResponsePayload.GetNonce(deviceTokenValidationResult.ClaimsIdentity!);
+            if (nonceInResponse != nonce)
+            {
+                Console.WriteLine("Nonce validation failed");
+                throw new ArgumentNullException("auth_session", "Nonce validation failed");
+            }
+
+            var authSession = ValidateTokenResponsePayload.GetAuthSession(deviceTokenValidationResult.ClaimsIdentity!);
+            _inMemoryCache = (authSession, signingCredentials);
 
             // TODO persist key in TPM and re-use
 
