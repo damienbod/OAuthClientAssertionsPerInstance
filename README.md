@@ -76,3 +76,5 @@ https://www.scottbrady.io/oauth/removing-shared-secrets-for-oauth-client-authent
 https://www.rfc-editor.org/rfc/rfc7636
 
 https://datatracker.ietf.org/doc/draft-ietf-oauth-first-party-apps
+
+https://github.com/oauth-wg/oauth-first-party-apps
