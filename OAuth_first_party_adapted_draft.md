@@ -177,7 +177,7 @@ defined in Section 5.1 with the additional parameter auth_session
 
 The auth_session MUST be included in the access token. The auth_session MUST match the device_auth_session value used in the client assertion.
 
-DPoP SHOULD be used.
+DPoP SHOULD be used. The token_type can be Bearer or DPoP
 
 An example successful token response is below:
 
@@ -188,7 +188,7 @@ Cache-Control: no-store
 
 {
     "access_token": "2YotnFZFEjr1zCsicMWpAA",
-    "token_type": "Bearer",
+    "token_type": "DPoP",
     "expires_in": 3600
 }
 ~~~

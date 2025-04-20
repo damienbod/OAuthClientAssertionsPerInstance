@@ -80,3 +80,5 @@ https://datatracker.ietf.org/doc/draft-ietf-oauth-first-party-apps
 https://github.com/oauth-wg/oauth-first-party-apps
 
 https://github.com/oauth-wg/oauth-first-party-apps/blob/main/draft-ietf-oauth-first-party-apps.md
+
+https://datatracker.ietf.org/doc/html/rfc9449
