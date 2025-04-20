@@ -1,11 +1,6 @@
-# First-Party Applications authentication
-
-# Introduction
-
-
 # Protocol Overview
 
-There are three primary ways this specification extends various parts of an OAuth system.
+There are two primary ways this specification extends various parts of an OAuth system.
 
 ## Initial Authorization Request
 
@@ -224,7 +219,7 @@ The auth_session is REQUIRED and used for device authorization.
 
 ### Authorization Challenge Request
 
-The Endpoint uses standard OAuth API best practices. No security changes are make to this endpoint from the existing OAuth standards. 
+The Endpoint uses standard OAuth API best practices. No security changes are made to this endpoint from the existing OAuth standards. 
 
 Sender-Constrained Tokens SHOULD be used. The request body can be anything depending on the application authorization requirements.
 
@@ -304,14 +299,13 @@ Malicious applications can be used to implement a phishing attack.
 
 ## Auth Session {#auth-session-security}
 
-### Auth Session Device Binding
+### Auth Session Device Binding, DPoP
 
-If the client and authorization server are using DPoP binding of access tokens and/or authorization codes, then the auth_session value SHOULD be protected as well. The authorization server SHOULD associate the auth_session value with the DPoP public key. This removes the need for the authorization server to include additional claims in the DPoP proof, while still benefitting from the assurance that the client presenting the proof has control over the DPoP key. To associate the auth_session value with the DPoP public key, the authorization server:
+If the client and authorization server are using DPoP binding of access tokens, then the auth_session value SHOULD be protected as well. 
 
-MUST check that the same DPoP public key is being used when the client presents the DPoP proof.
-MUST verify the DPoP proof to ensure the client controls the corresponding private key whenever the client includes the auth_session in an Authorization Challenge Request as described in {{challenge-request}}.
-DPoP binding of the auth_session value ensures that the context referenced by the auth_session cannot be stolen and reused by another device.
+The auth_session is attached to the device/application key not the DPoP key. The public/private key used for DPoP MUST use be a separate key and can be used in a standard way.
 
- ## User authorization
+Application/Device binding of the auth_session value ensures that the context referenced by the auth_session cannot be stolen and reused by another device.
+
 
 
