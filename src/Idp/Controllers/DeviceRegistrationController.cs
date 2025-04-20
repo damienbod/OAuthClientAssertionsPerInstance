@@ -24,17 +24,23 @@ public class DeviceRegistrationController : Controller
     /// <summary>
     /// Unsecure API which creates a session
     /// DDOS protection required
-    /// Add nonce to prevent reply attacks
     /// </summary>
-    /// <param name="publicKey">Public key which is used by the session creator</param>
     [HttpPost]
-    public async Task<DeviceRegistrationResponse> CreateAuthSessionAsync(DeviceRegistrationRequest deviceRegistrationRequest)
+    public async Task<IActionResult> CreateAuthSessionAsync(DeviceRegistrationRequest deviceRegistrationRequest)
     {
         // TODO
-        // Validate client_id
-        // Validate grant_type = "urn:ietf:params:oauth:grant-type:fp_register"
         // DDoS protection required...
-        // Maybe as secret to authenticate, prevent simple bots
+        // Maybe add secret to authenticate, prevent simple bots
+
+        if (deviceRegistrationRequest.grant_type != OAuthConsts.GRANT_TYPE)
+        {
+            return UnauthorizedValidationParametersFailed("invalid_request", "Request grant_type is incorrect");
+        }
+
+        if (deviceRegistrationRequest.client_id != "cid-fp-device")
+        {
+            return UnauthorizedValidationParametersFailed("invalid_client", "Request client_id is incorrect");
+        }
 
         var authSession = _publicKeyService.CreateSession(deviceRegistrationRequest.public_key);
         var signingCredential = await _keys.GetSigningCredentialsAsync();
@@ -54,7 +60,7 @@ public class DeviceRegistrationController : Controller
             State = deviceRegistrationRequest.state
         };
 
-        return deviceRegistrationResponse;
+        return Ok(deviceRegistrationResponse);
     }
 
     public static string GenerateJwtTokenAsync(string authSession, string nonce, SigningCredentials signingCredentials, string issuer, string clientId)
@@ -90,7 +96,7 @@ public class DeviceRegistrationController : Controller
             Audience = clientId,
             Issuer = issuer,
             SigningCredentials = signingCredentials,
-            TokenType = "fp+jwt"
+            TokenType = OAuthConsts.TOKEN_TYPE
         };
 
         tokenDescriptor.AdditionalHeaderClaims ??= new Dictionary<string, object>();
@@ -103,5 +109,19 @@ public class DeviceRegistrationController : Controller
         var token = tokenHandler.CreateToken(tokenDescriptor);
 
         return tokenHandler.WriteToken(token);
+    }
+
+    private IActionResult UnauthorizedValidationParametersFailed(string reason, string error)
+    {
+        var errorResult = new OAuthErrorResponse
+        {
+            error = error,
+            error_description = reason,
+            timestamp = DateTime.UtcNow,
+            correlation_id = Guid.NewGuid().ToString(),
+            trace_id = Guid.NewGuid().ToString(),
+        };
+
+        return Unauthorized(errorResult);
     }
 }

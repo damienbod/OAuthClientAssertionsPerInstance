@@ -13,7 +13,7 @@ public class DeviceRegistrationResponse
     public string FpToken { get; set; } = string.Empty;
 
     [JsonPropertyName(OAuthConsts.RESPONSE_TOKEN_TYPE)]
-    public string TokenType { get; set; } = "fp+jwt";
+    public string TokenType { get; set; } = OAuthConsts.TOKEN_TYPE;
 
     [JsonPropertyName(OAuthConsts.REQUEST_STATE)]
     public string State { get; set; } = string.Empty;
