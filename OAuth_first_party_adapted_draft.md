@@ -68,9 +68,9 @@ The client makes a request to the device registration endpoint by adding the fol
 
 "grant_type": : REQUIRED
 
-"public_key": : REQUIRED. RS256 
+"public_key": : REQUIRED. 
 
-"alg": : REQUIRED "ES256" "RS256"
+"alg": : REQUIRED Supported values "ES256" "RS256"
 
 "state": : OPTIONAL. 
 
