@@ -11,6 +11,7 @@ public class OAuthConsts
 
     public const string REQUEST_GRANT_TYPE = "grant_type";
     public const string REQUEST_PUBLIC_KEY = "public_key";
+    public const string REQUEST_ALG = "alg";
     public const string REQUEST_STATE = "state";
     public const string REQUEST_CLIENT_ID = "client_id";
     public const string REQUEST_NONCE = "nonce";

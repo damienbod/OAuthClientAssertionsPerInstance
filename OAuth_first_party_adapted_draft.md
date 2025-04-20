@@ -68,7 +68,9 @@ The client makes a request to the device registration endpoint by adding the fol
 
 "grant_type": : REQUIRED
 
-"public_key": : REQUIRED. RS256 ...
+"public_key": : REQUIRED. RS256 
+
+"alg": : REQUIRED "ES256" "RS256"
 
 "state": : OPTIONAL. 
 
@@ -83,6 +85,7 @@ Host: as.example.com
 client_id=<client_id>
 &grant_type=urn:ietf:params:oauth:grant-type:fp_register
 &public_key=<public_key>
+&alg=RS256
 &state=<state>
 &nonce=<nonce>
  ~~~

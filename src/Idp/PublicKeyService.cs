@@ -5,15 +5,15 @@ namespace Idp;
 
 public class PublicKeyService
 {
-    private static readonly Dictionary<string, string> _inMemoryCache = [];
+    private static readonly Dictionary<string, (string PublicKey, string Alg)> _inMemoryCache = [];
 
-    public string CreateSession(string publicKey)
+    public string CreateSession(string publicKey, string alg)
     {
         var authSession = RandomNumberGenerator.GetHexString(32);
 
         // Add to cache with 10 min lifespan
         // DDoS protection required
-        _inMemoryCache.Add(authSession, publicKey);
+        _inMemoryCache.Add(authSession, (publicKey, alg));
 
         return authSession;
     }
@@ -24,9 +24,9 @@ public class PublicKeyService
     public string GetPublicKey(string authSession)
     {
         var data = _inMemoryCache.GetValueOrDefault(authSession);
-        if (data != null)
+        if (data.PublicKey != null)
         {
-            return data;
+            return data.PublicKey;
         }
 
         throw new ArgumentNullException(nameof(authSession), "something went wrong");
@@ -38,11 +38,13 @@ public class PublicKeyService
     public SecurityKey GetPublicSecurityKey(string authSession)
     {
         var publicKeyPem = _inMemoryCache.GetValueOrDefault(authSession);
-        if (publicKeyPem != null)
+
+        // TODO we should support different alg types
+        if (publicKeyPem.PublicKey != null)
         {
             RsaSecurityKey securityKey;
             var key = RSA.Create();
-            key.ImportFromPem(publicKeyPem);
+            key.ImportFromPem(publicKeyPem.PublicKey);
             securityKey = new RsaSecurityKey(key);
 
             return securityKey;

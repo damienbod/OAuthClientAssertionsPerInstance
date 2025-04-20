@@ -19,6 +19,9 @@ public class DeviceRegistrationRequest
     [JsonPropertyName(OAuthConsts.REQUEST_PUBLIC_KEY)]
     public string public_key { get; set; } = string.Empty;
 
+    [JsonPropertyName(OAuthConsts.REQUEST_ALG)]
+    public string alg { get; set; } = string.Empty;
+
     [JsonPropertyName(OAuthConsts.REQUEST_STATE)]
     public string state { get; set; } = string.Empty;
 

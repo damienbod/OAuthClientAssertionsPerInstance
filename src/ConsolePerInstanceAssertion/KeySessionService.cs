@@ -53,6 +53,7 @@ public class KeySessionService
             new KeyValuePair<string, string>("client_id", _authFlowConfiguration.ClientId),
             new KeyValuePair<string, string>("grant_type", OAuthConsts.GRANT_TYPE),
             new KeyValuePair<string, string>("public_key", publicKeyPem),
+            new KeyValuePair<string, string>("alg", "RS256"),
             new KeyValuePair<string, string>("state", state),
             new KeyValuePair<string, string>("nonce", nonce)
         };
