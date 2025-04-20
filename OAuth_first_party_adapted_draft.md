@@ -1,3 +1,12 @@
+# First-Party Applications authentication
+
+# Introduction
+
+
+# Protocol Overview
+
+There are three primary ways this specification extends various parts of an OAuth system.
+
 ## Initial Authorization Request
 
 ~~~ ascii-art
@@ -52,8 +61,11 @@ Figure: First-Party Client Authorization Device Request
 - (G) repeat for n-user properties
 - (H) ..
 
+# Protocol Endpoints
 
-## Device Registration Request
+## Device Registration Endpoint
+
+### Device Registration Request
 
 ~~~
 POST /token HTTP/1.1
@@ -101,7 +113,9 @@ Example of FP Token
 }
 ~~~
 
-## Token Endpoint Client Credentials token request using client assertion Request
+## Token Endpoint
+
+### OAuth Client Credentials token request using client assertion Request
 
 The Authorization Server uses the 'device_auth_session' to find the correct public key to authenticate the client assertion. The value is added to the access token on a successful validation. 
 
@@ -118,7 +132,7 @@ The Authorization Server uses the 'device_auth_session' to find the correct publ
 }
 ~~~
 
-## Token Endpoint Successful Response
+### Token Endpoint Successful Response
 
 This specification extends the OAuth 2.0 [RFC6749] token response
 defined in Section 5.1 with the additional parameter auth_session
@@ -163,7 +177,9 @@ Cache-Control: no-store
 }
 ~~~
 
-## Authorization Challenge Request
+### Authorization Challenge Request
+
+The Endpoint uses standard OAuth API best practices. No security changes are make to this endpoint from the existing standards. 
 
 The request body can be anything depending on the application authorization requirements.
 
@@ -184,11 +200,63 @@ Authorization: DPoP "access_token"
 &email=<email_address>
 ~~~
 
-## Using the access token on a resource server
+# Using the access token on a resource server
 
-The auth_session is included inthe access token. This claim is used to implement any further device/user authorization requirements.
+The auth_session is included in the access token. This claim is used to implement any further device/user authorization requirements.
 The resource server can decide on what user properties are required to allow access. 
 
-## Error Responses
+## Error Responses 
 
 If the access token is valid but the user authentication methods attached to the device is missing for the request, an HTTP 403 or a 404 is returned.
+
+"error": : REQUIRED. A single ASCII {{USASCII}} error code from the following:
+
+~~~
+ "invalid_request":
+ :     The request is missing a required parameter, includes an
+       unsupported parameter value,
+       repeats a parameter, includes multiple credentials,
+       utilizes more than one mechanism for authenticating the
+       client, or is otherwise malformed.
+
+ "invalid_client":
+ :     Client authentication failed (e.g., unknown client, no
+       client authentication included, or unsupported
+       authentication method).  The authorization server MAY
+       return an HTTP 401 (Unauthorized) status code to indicate
+       which HTTP authentication schemes are supported.  If the
+       client attempted to authenticate via the `Authorization`
+       request header field, the authorization server MUST
+       respond with an HTTP 401 (Unauthorized) status code and
+       include the `WWW-Authenticate` response header field
+       matching the authentication scheme used by the client.
+
+ "invalid_session":
+ :     The provided `auth_session` is
+       invalid, expired, revoked, or is otherwise invalid.
+
+ "invalid_scope":
+ :     The requested scope is invalid, unknown, malformed, or
+       exceeds the scope granted by the resource owner.
+
+ "insufficient_authorization":
+ :     The presented authorization is insufficient, and the authorization
+       server is requesting the client take additional steps to
+       complete the authorization.
+
+ Values for the `error` parameter MUST NOT include characters
+ outside the set %x20-21 / %x23-5B / %x5D-7E.
+
+ The authorization server MAY extend these error codes with custom
+ messages based on the requirements of the authorization server.
+ ~~~ 
+
+ # Security Considerations {#security-considerations}
+
+ ## phishing
+
+ Malicious applications can be used to implement a phishing attack.
+
+ ## User authorization
+
+
