@@ -172,7 +172,9 @@ The auth_session can be requested using the scope.
 This specification extends the OAuth 2.0 [RFC6749] token response
 defined in Section 5.1 with the additional parameter auth_session
 
-The auth_session MUST be included in the access token. The auth_session MUST match the device_auth_session value sent in the client assertion.
+The auth_session MUST be included in the access token. The auth_session MUST match the device_auth_session value used in the client assertion.
+
+DPoP SHOULD be used.
 
 An example successful token response is below:
 
@@ -184,8 +186,7 @@ Cache-Control: no-store
 {
     "access_token": "2YotnFZFEjr1zCsicMWpAA",
     "token_type": "Bearer",
-    "expires_in": 3600,
-    "refresh_token": "tGzv3JOkF0XG5Qx2TlKWIA",
+    "expires_in": 3600
 }
 ~~~
 
@@ -242,7 +243,7 @@ Authorization: DPoP "access_token"
 
 # Using the access token on a resource server
 
-The auth_session is included in the access token. This claim is used to implement any further device/user authorization requirements.
+The auth_session is included in the access token. This claim is used to implement any further Application/Device and user authorization requirements.
 The resource server can decide on what user properties are required to allow access. 
 
 ## Error Responses 
@@ -293,19 +294,14 @@ If the access token is valid but the user authentication methods attached to the
 
 # Security Considerations {#security-considerations}
 
-## phishing
+## Phishing
 
 Malicious applications can be used to implement a phishing attack.
 
 ## Auth Session {#auth-session-security}
 
-### Auth Session Device Binding, DPoP
+### Auth Session Application/Device Binding ands DPoP
 
-If the client and authorization server are using DPoP binding of access tokens, then the auth_session value SHOULD be protected as well. 
-
-The auth_session is attached to the device/application key not the DPoP key. The public/private key used for DPoP MUST use be a separate key and can be used in a standard way.
+The auth_session is attached to the Application/Device key not the DPoP key. The public/private key used for DPoP SHOULD use be a separate key and can be used in a standard way.
 
 Application/Device binding of the auth_session value ensures that the context referenced by the auth_session cannot be stolen and reused by another device.
-
-
-
