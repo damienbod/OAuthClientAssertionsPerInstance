@@ -68,8 +68,7 @@ The client makes a request to the device registration endpoint by adding the fol
 
 "grant_type": : REQUIRED
 
-"public_key": : REQUIRED. PEM format. Note: jwk could also be used. Represents the public key chosen by the client in JSON Web Key (JWK) [RFC7517](https://datatracker.ietf.org/doc/html/rfc7517) format as defined in [Section 4.1.3](https://www.rfc-editor.org/rfc/rfc7515#section-4.1.3) of [RFC7515](https://datatracker.ietf.org/doc/html/rfc7515). It MUST NOT contain a private key.
-
+"public_key": : REQUIRED. public key in PEM format. Note: jwk could also be used. Represents the public key chosen by the client in JSON Web Key (JWK) [RFC7517](https://datatracker.ietf.org/doc/html/rfc7517) format as defined in [Section 4.1.3](https://www.rfc-editor.org/rfc/rfc7515#section-4.1.3) of [RFC7515](https://datatracker.ietf.org/doc/html/rfc7515). It MUST NOT contain a private key.
 
 "alg": : REQUIRED An identifier for a JWS asymmetric digital signature algorithm from [IANA.JOSE.ALGS](https://www.iana.org/assignments/jose/jose.xhtml). It MUST NOT be none or an identifier for a symmetric algorithm (Message Authentication Code (MAC)).
 
@@ -308,6 +307,6 @@ An access token for the auth_session can always be used and any Application/Devi
 
 ### Auth Session Application/Device Binding ands DPoP
 
-The auth_session is attached to the Application/Device key not the DPoP key. The public/private key used for DPoP SHOULD use be a separate key and can be used in a standard way.
+The auth_session is attached to the Application/Device key not the DPoP key. The public/private key used for DPoP SHOULD use a separate key and can be used in a standard way.
 
 Application/Device binding of the auth_session value ensures that the context referenced by the auth_session cannot be stolen and reused by another device.
