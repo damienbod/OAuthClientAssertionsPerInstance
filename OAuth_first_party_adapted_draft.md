@@ -300,6 +300,8 @@ Malicious applications can be used to implement a phishing attack.
 
 ## Auth Session {#auth-session-security}
 
+An access token for the auth_session can always be used and any Application/Device can request a new secure session. While this session is secure, the Application/Device has no specific user authentication methods. The Application/Device is responsible for implementing this and the user properties can be attached using a secure API. 
+
 ### Auth Session Application/Device Binding ands DPoP
 
 The auth_session is attached to the Application/Device key not the DPoP key. The public/private key used for DPoP SHOULD use be a separate key and can be used in a standard way.
