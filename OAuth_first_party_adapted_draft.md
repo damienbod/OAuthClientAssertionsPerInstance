@@ -68,9 +68,10 @@ The client makes a request to the device registration endpoint by adding the fol
 
 "grant_type": : REQUIRED
 
-"public_key": : REQUIRED. 
+"public_key": : REQUIRED. PEM format. Note: jwk could also be used. Represents the public key chosen by the client in JSON Web Key (JWK) [RFC7517](https://datatracker.ietf.org/doc/html/rfc7517) format as defined in [Section 4.1.3](https://www.rfc-editor.org/rfc/rfc7515#section-4.1.3) of [RFC7515](https://datatracker.ietf.org/doc/html/rfc7515). It MUST NOT contain a private key.
 
-"alg": : REQUIRED Supported values "ES256" "RS256"
+
+"alg": : REQUIRED An identifier for a JWS asymmetric digital signature algorithm from [IANA.JOSE.ALGS](https://www.iana.org/assignments/jose/jose.xhtml). It MUST NOT be none or an identifier for a symmetric algorithm (Message Authentication Code (MAC)).
 
 "state": : OPTIONAL. 
 
