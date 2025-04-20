@@ -65,6 +65,20 @@ Figure: First-Party Client Authorization Device Request
 
 ## Device Registration Endpoint
 
+The Device Endpoint is used to register devices. A client creates a new private, public key and stores to key to in a safe location for the lifetime of the application.
+
+The client makes a request to the device registration endpoint by adding the following parameters, as well as parameters from any extensions, using the application/x-www-form-urlencoded format with a character encoding of UTF-8 in the HTTP request body:
+
+"client_id": : REQUIRED 
+
+"grant_type": : REQUIRED
+
+"public_key": : REQUIRED. RS256 ...
+
+"state": : OPTIONAL. 
+
+"nonce": : OPTIONAL. 
+
 ### Device Registration Request
 
 ~~~
@@ -79,6 +93,14 @@ client_id=<client_id>
  ~~~
 
 ## Device Registration Response
+
+"fp_token": : REQUIRED. The signed JWT token. MUST be fully validated included signature.
+
+"token_type": : REQUIRED. "fp+jwt"
+
+"state": : OPTIONAL. MUST be validated if requested. The server MUST included this from the original request.
+
+"expires_in": : REQUIRED. 
 
 An example successful device registration response is below:
 
@@ -95,7 +117,15 @@ Cache-Control: no-store
 }
 ~~~
 
-Example of FP Token
+### Device Registration Response fp_token
+
+"auth_session": : REQUIRED. Used for all token requests for this device. This is a unique value. One public_key has one auth_session. The server generates this in a random way.
+
+"aud": : REQUIRED. 
+
+"nonce": : OPTIONAL. MUST be validated if requested. The server MUST included this from the original request.
+
+"iss": : REQUIRED. 
 
 ~~~
 {
@@ -115,9 +145,15 @@ Example of FP Token
 
 ## Token Endpoint
 
+The client assertion is extended to use a new "device_auth_session" parameter and is used to authenticate the token request.
+
 ### OAuth Client Credentials token request using client assertion Request
 
-The Authorization Server uses the 'device_auth_session' to find the correct public key to authenticate the client assertion. The value is added to the access token on a successful validation. 
+The Authorization Server uses the 'device_auth_session' to find the correct public key to authenticate the client assertion. The value MUST be added to the resulting access token on a successful validation. 
+
+#### Client assertion
+
+"device_auth_session": : REQUIRED. Used to find the device public key and authenticate the device.
 
 ~~~
 {
@@ -132,10 +168,16 @@ The Authorization Server uses the 'device_auth_session' to find the correct publ
 }
 ~~~
 
+#### Token request
+
+The auth_session can be requested using the scope.
+
 ### Token Endpoint Successful Response
 
 This specification extends the OAuth 2.0 [RFC6749] token response
 defined in Section 5.1 with the additional parameter auth_session
+
+The auth_session MUST be included in the access token. The auth_session MUST match the device_auth_session value sent in the client assertion.
 
 An example successful token response is below:
 
@@ -154,6 +196,9 @@ Cache-Control: no-store
 
 ### Example of Access Token using DPoP
 
+The access token can be used for all further requests.
+
+The auth_session is REQUIRED and used for device authorization.
 ~~~
 {
     "alg": "RS256",
@@ -169,7 +214,7 @@ Cache-Control: no-store
         "jkt": "1-xQJRDcRlAGIvAAd1ayQSenXcW5_Ecez_G13qdcM6c"
     },
     "scope": [
-        "auth_session:AC7E69B69D627CDDA61AF41518B046E1",
+        "auth_session:<auth_session>",
         "OnboardingUserScope"
     ],
     "client_id": "onboarding-user-client",
@@ -179,9 +224,9 @@ Cache-Control: no-store
 
 ### Authorization Challenge Request
 
-The Endpoint uses standard OAuth API best practices. No security changes are make to this endpoint from the existing standards. 
+The Endpoint uses standard OAuth API best practices. No security changes are make to this endpoint from the existing OAuth standards. 
 
-The request body can be anything depending on the application authorization requirements.
+Sender-Constrained Tokens SHOULD be used. The request body can be anything depending on the application authorization requirements.
 
 A phishing resistant user authentication is recommended on the device for the user. 
 
@@ -251,11 +296,21 @@ If the access token is valid but the user authentication methods attached to the
  messages based on the requirements of the authorization server.
  ~~~ 
 
- # Security Considerations {#security-considerations}
+# Security Considerations {#security-considerations}
 
- ## phishing
+## phishing
 
- Malicious applications can be used to implement a phishing attack.
+Malicious applications can be used to implement a phishing attack.
+
+## Auth Session {#auth-session-security}
+
+### Auth Session Device Binding
+
+If the client and authorization server are using DPoP binding of access tokens and/or authorization codes, then the auth_session value SHOULD be protected as well. The authorization server SHOULD associate the auth_session value with the DPoP public key. This removes the need for the authorization server to include additional claims in the DPoP proof, while still benefitting from the assurance that the client presenting the proof has control over the DPoP key. To associate the auth_session value with the DPoP public key, the authorization server:
+
+MUST check that the same DPoP public key is being used when the client presents the DPoP proof.
+MUST verify the DPoP proof to ensure the client controls the corresponding private key whenever the client includes the auth_session in an Authorization Challenge Request as described in {{challenge-request}}.
+DPoP binding of the auth_session value ensures that the context referenced by the auth_session cannot be stolen and reused by another device.
 
  ## User authorization
 
