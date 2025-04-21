@@ -92,7 +92,7 @@ client_id=<client_id>
 
 ## Device Registration Response
 
-"fp_token": : REQUIRED. The signed JWT token. MUST be fully validated included signature.
+"fp_token": : REQUIRED. The signed JWT token. MUST be fully validated including the signature.
 
 "token_type": : REQUIRED. "fp+jwt"
 
