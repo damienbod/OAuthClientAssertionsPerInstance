@@ -90,7 +90,7 @@ client_id=<client_id>
 &nonce=<nonce>
  ~~~
 
-## Device Registration Response
+### Device Registration Response
 
 "fp_token": : REQUIRED. The signed JWT token. MUST be fully validated including the signature.
 
