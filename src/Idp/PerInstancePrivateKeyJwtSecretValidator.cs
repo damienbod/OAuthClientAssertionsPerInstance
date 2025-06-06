@@ -272,8 +272,6 @@ public class PerInstancePrivateKeyJwtSecretValidator : ISecretValidator
 
         return false;
     }
-
-
 }
 
 /// <summary>
