@@ -1,8 +1,8 @@
-# Experimental alternative flow for OAuth First-Party Applications
+# Experimental alternative flow for OAuth 2.0 First-Party Applications
 
-## OAUTH Client assertions using Duende IdentityServer
+## OAuth 2.0 Client assertions using Duende IdentityServer
 
-Use the ICustomTokenRequestValidator interface
+Use the **ICustomTokenRequestValidator** interface
 
 ## Duende.IdentityServer.Validation.PrivateKeyJwtSecretValidator
 
@@ -27,7 +27,6 @@ builder.AddSecretParser<JwtBearerClientAssertionSecretParser>();
 builder.AddSecretValidator<YourSecretValidator>(); // TODO, create your secret validator class
 ```
 
-
 ## Migrations
 
 ```
@@ -40,7 +39,7 @@ Update-Database -Context ApplicationDbContext
 
 ## Notes
 
-The DefaultTokenCreationService can be used to add custom claims to the token
+The **DefaultTokenCreationService** can be used to add custom claims to the token
 
 ```
 public class CustomTokenCreationService : DefaultTokenCreationService
@@ -63,7 +62,7 @@ public class CustomTokenCreationService : DefaultTokenCreationService
 
 ## History
 
-- 2025-06-06 Update packages
+- 2025-06-06 Updated packages
 - 2025-04-13 Initial version
 
 ## Links
