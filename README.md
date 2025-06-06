@@ -59,6 +59,11 @@ public class CustomTokenCreationService : DefaultTokenCreationService
 }
 ```
 
+## History
+
+- 2025-06-06 Update packages
+- 2025-04-13 Initial version
+
 ## Links
 
 https://docs.duendesoftware.com/identityserver/v7/tokens/authentication/jwt/
