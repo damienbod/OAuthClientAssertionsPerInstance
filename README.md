@@ -1,8 +1,10 @@
-# OAUTH Client assertions using Duende IdentityServer
+# Experimental alternative flow for OAuth First-Party Applications
 
-ICustomTokenRequestValidator 
+## OAUTH Client assertions using Duende IdentityServer
 
-# Duende.IdentityServer.Validation.PrivateKeyJwtSecretValidator
+Use the ICustomTokenRequestValidator interface
+
+## Duende.IdentityServer.Validation.PrivateKeyJwtSecretValidator
 
 Validates JWTs that are signed with either X.509 certificates or keys wrapped in a JWK. Can be enabled by calling the AddJwtBearerClientAuthentication DI extension method.
 
