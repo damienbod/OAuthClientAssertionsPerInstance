@@ -1,5 +1,9 @@
 # Experimental alternative flow for OAuth 2.0 First-Party Applications
 
+Looks at an alternative way of implementing a native app authentication and authorization. At present, a web browser is used to implement authentication of native applications when using OAuth and OpenID Connect. The flow is based on the OAuth 2.0 for First-Party Applications draft and adapted to be focused on the device.
+
+Related issue: https://github.com/oauth-wg/oauth-first-party-apps/issues/135
+
 ## OAuth 2.0 Client assertions using Duende IdentityServer
 
 Use the **ICustomTokenRequestValidator** interface
