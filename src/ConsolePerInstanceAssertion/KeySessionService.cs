@@ -23,7 +23,7 @@ public class KeySessionService
     /// </summary>
     private static (string? AuthSession, SigningCredentials? SigningCredentials) _inMemoryCache = (null, null);
 
-    private AuthFlowConfiguration _authFlowConfiguration = new AuthFlowConfiguration
+    private readonly AuthFlowConfiguration _authFlowConfiguration = new AuthFlowConfiguration
     {
         ClientId = "cid-fp-device",
         TokenMetadataAddress = "https://localhost:5101/.well-known/openid-configuration",
