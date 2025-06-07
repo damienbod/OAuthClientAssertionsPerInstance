@@ -12,6 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\AuthFlow\AuthFlow.csproj" />
+    <ProjectReference Include="..\AuthFlow\AuthFlow.csproj" />
   </ItemGroup>
 </Project>
