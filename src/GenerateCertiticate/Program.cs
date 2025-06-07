@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 
-namespace GenerateCertiticate;
+namespace GenerateCertificate;
 
 class Program
 {
