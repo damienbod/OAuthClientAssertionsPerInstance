@@ -4,6 +4,8 @@ Looks at an alternative way of implementing a native app authentication and auth
 
 Related issue: https://github.com/oauth-wg/oauth-first-party-apps/issues/135
 
+Draft flow docs: [Device first OAuth 2.0 First-Party Applications](/OAuth_first_party_adapted_draft.md)
+
 [![.NET](https://github.com/damienbod/OAuthClientAssertionsPerInstance/actions/workflows/dotnet.yml/badge.svg)](https://github.com/damienbod/OAuthClientAssertionsPerInstance/actions/workflows/dotnet.yml)
 
 ## OAuth 2.0 Client assertions using Duende IdentityServer
