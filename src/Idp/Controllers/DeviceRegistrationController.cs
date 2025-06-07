@@ -117,7 +117,7 @@ public class DeviceRegistrationController : Controller
         return tokenHandler.WriteToken(token);
     }
 
-    private IActionResult UnauthorizedValidationParametersFailed(string reason, string error)
+    private UnauthorizedObjectResult UnauthorizedValidationParametersFailed(string reason, string error)
     {
         var errorResult = new OAuthErrorResponse
         {
