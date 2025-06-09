@@ -8,6 +8,8 @@ Draft flow docs: [Device first OAuth 2.0 First-Party Applications](/OAuth_first_
 
 [![.NET](https://github.com/damienbod/OAuthClientAssertionsPerInstance/actions/workflows/dotnet.yml/badge.svg)](https://github.com/damienbod/OAuthClientAssertionsPerInstance/actions/workflows/dotnet.yml)
 
+Blog: [Experimental alternative flow for OAuth First-Party Applications](https://damienbod.com)
+
 ## OAuth 2.0 Client assertions using Duende IdentityServer
 
 Use the **ICustomTokenRequestValidator** interface
