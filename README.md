@@ -72,6 +72,7 @@ public class CustomTokenCreationService : DefaultTokenCreationService
 
 ## History
 
+- 2025-08-01 Updated packages
 - 2025-06-07 Updated packages, added build workflow, clean up
 - 2025-04-13 Initial version
 
